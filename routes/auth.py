@@ -90,7 +90,7 @@ def _attach_auth_cookie(response: RedirectResponse, token: str) -> None:
         value=token,
         httponly=True,
         secure=True,
-        samesite="lax",
+        samesite="none",
         max_age=ACCESS_TOKEN_EXPIRE_HOURS * 3600,
         path="/",
     )
@@ -288,7 +288,7 @@ async def login(
 async def logout() -> RedirectResponse:
     """Clear the auth cookie and redirect to the login page."""
     response = RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
-    response.delete_cookie(key=COOKIE_NAME, httponly=True, samesite="lax")
+    response.delete_cookie(key=COOKIE_NAME, httponly=True, secure=True, samesite="none", path="/")
     return response
 
 
