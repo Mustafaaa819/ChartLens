@@ -46,8 +46,11 @@ def _decode_token(token: str) -> str | None:
     settings = get_settings()
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[ALGORITHM])
-        return payload.get("sub")
-    except JWTError:
+        sub = payload.get("sub")
+        logger.debug("Token decoded successfully, sub=%s", sub)
+        return sub
+    except JWTError as e:
+        logger.warning("JWT decode failed: %s", e)
         return None
 
 
@@ -89,6 +92,7 @@ def _attach_auth_cookie(response: RedirectResponse, token: str) -> None:
         secure=True,
         samesite="lax",
         max_age=ACCESS_TOKEN_EXPIRE_HOURS * 3600,
+        path="/",
     )
 
 
