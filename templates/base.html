@@ -6,6 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}ChartLens{% endblock %}</title>
   <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     if (!window.tailwind) {
@@ -16,45 +19,72 @@
         document.body.innerHTML;
     }
   </script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Playfair Display', 'Georgia', 'serif'],
+            body: ['IBM Plex Sans', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            navy: '#1e3a5f',
+            paper: '#f8f6f1',
+            'action-blue': '#2563eb',
+            'rule-line': '#d4c9b0',
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; }
+    body { font-family: 'IBM Plex Sans', system-ui, sans-serif; }
+    .font-display { font-family: 'Playfair Display', Georgia, serif; }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
+<body class="bg-paper text-gray-900 min-h-screen flex flex-col font-body">
 
   <!-- ── Navbar ── -->
-  <nav class="bg-[#1e3a5f] shadow-sm">
+  <nav class="bg-navy border-b border-[#162d4a]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
 
-        <!-- Logo -->
-        <a href="/" class="text-white text-xl font-bold tracking-tight hover:text-blue-200 transition-colors">
-          ChartLens
+        <!-- Wordmark -->
+        <a href="/" class="flex items-center gap-2.5 group">
+          <span class="font-display text-xl font-bold text-white tracking-tight
+                       group-hover:text-blue-200 transition-colors">
+            ChartLens
+          </span>
+          <span class="hidden sm:inline text-[10px] font-semibold tracking-[0.12em]
+                       uppercase text-blue-300 opacity-70 mt-0.5">
+            Legal&#8209;Tech
+          </span>
         </a>
 
         <!-- Nav links -->
         <div class="flex items-center gap-4">
           {% if current_user %}
             <a href="/dashboard"
-               class="text-blue-100 hover:text-white text-sm font-medium transition-colors">
+               class="text-blue-200 hover:text-white text-sm font-medium transition-colors">
               Dashboard
             </a>
             <form action="/auth/logout" method="post" class="inline">
               <button type="submit"
-                      class="bg-[#2563eb] hover:bg-blue-700 text-white text-sm font-semibold
-                             px-4 py-2 rounded-md transition-colors">
-                Logout
+                      class="border border-blue-400 border-opacity-40 hover:border-opacity-70
+                             text-blue-100 hover:text-white text-sm font-medium
+                             px-4 py-1.5 rounded transition-colors">
+                Sign Out
               </button>
             </form>
           {% else %}
             <a href="/login"
-               class="text-blue-100 hover:text-white text-sm font-medium transition-colors">
-              Login
+               class="text-blue-200 hover:text-white text-sm font-medium transition-colors">
+              Sign In
             </a>
             <a href="/register"
-               class="bg-[#2563eb] hover:bg-blue-700 text-white text-sm font-semibold
-                      px-4 py-2 rounded-md transition-colors">
-              Register
+               class="bg-action-blue hover:bg-blue-700 text-white text-sm font-semibold
+                      px-4 py-2 rounded transition-colors">
+              Start Free Trial
             </a>
           {% endif %}
         </div>
@@ -103,9 +133,25 @@
   </main>
 
   <!-- ── Footer ── -->
-  <footer class="bg-[#1e3a5f] text-blue-300 text-sm py-4 mt-auto">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      ChartLens &copy; 2025 &mdash; Built for PI lawyers
+  <footer class="bg-navy mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-2">
+        <span class="font-display text-white text-sm font-semibold tracking-tight">
+          ChartLens
+        </span>
+        <span class="text-blue-300 text-xs">
+          &copy; 2025 &mdash; Built for personal injury attorneys
+        </span>
+        <div class="flex items-center gap-4">
+          <a href="/billing" class="text-blue-300 hover:text-white text-xs transition-colors">
+            Billing
+          </a>
+          <span class="text-blue-400 text-xs opacity-40">|</span>
+          <span class="text-blue-300 text-xs opacity-60">
+            Data encrypted at rest &middot; 256-bit TLS
+          </span>
+        </div>
+      </div>
     </div>
   </footer>
 
