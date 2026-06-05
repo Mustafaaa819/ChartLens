@@ -23,8 +23,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY . .
 
-# Create runtime directories (uploads, reports) so they exist inside the container
+# Create runtime directories
 RUN mkdir -p uploads reports static
+
+# /data is the HF Spaces persistent volume — survives container rebuilds
+RUN mkdir -p /data && chmod -R 777 /data
 
 # Expose port
 EXPOSE 7860
