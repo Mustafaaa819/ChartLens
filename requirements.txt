@@ -1,0 +1,38 @@
+# Web framework
+fastapi==0.115.5
+uvicorn[standard]==0.32.0
+python-multipart==0.0.12    # required for file uploads
+starlette==0.41.3
+jinja2==3.1.4
+aiofiles==24.1.0
+ 
+# Sessions + env
+itsdangerous==2.2.0          # SessionMiddleware dependency
+python-dotenv==1.0.1
+ 
+# PDF processing
+PyMuPDF==1.24.11
+ 
+# AI
+anthropic==0.40.0
+ 
+# Database (simple SQLite, no Docker needed for MVP)
+sqlalchemy==2.0.36
+ 
+# Reports
+reportlab==4.2.5             # PDF generation
+openpyxl==3.1.5              # Excel generation
+ 
+# Billing (Week 4)
+stripe==11.1.0
+ 
+# Async HTTP (parallel Claude calls + Lemon Squeezy REST API — no official LS SDK needed)
+httpx==0.27.2
+
+#Pydantic-settings
+pydantic-settings==2.14.1
+
+python-jose[cryptography]==3.3.0
+
+# Rate limiting
+slowapi==0.1.9

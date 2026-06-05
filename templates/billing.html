@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block title %}Billing & Plan — ChartLens{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+  <!-- ── Page header ── -->
+  <div class="flex items-center gap-3 flex-wrap mb-8">
+    <h1 class="text-2xl font-bold text-[#1e3a5f]">Billing & Plan</h1>
+
+    {% if subscription_status == 'trial' %}
+      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
+                   bg-amber-100 text-[#d97706] border border-amber-200">
+        Trial
+      </span>
+    {% elif subscription_status == 'active' %}
+      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
+                   bg-green-100 text-[#16a34a] border border-green-200">
+        Pro &mdash; Active
+      </span>
+    {% elif subscription_status == 'past_due' %}
+      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
+                   bg-red-100 text-[#dc2626] border border-red-200">
+        Payment Failed
+      </span>
+    {% elif subscription_status == 'canceled' %}
+      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
+                   bg-gray-100 text-gray-600 border border-gray-200">
+        Canceled
+      </span>
+    {% endif %}
+  </div>
+
+  <!-- ── Past due warning banner ── -->
+  {% if subscription_status == 'past_due' %}
+    <div class="flex items-start gap-3 rounded-md border border-red-200 bg-red-50 p-4 mb-6">
+      <svg class="w-5 h-5 text-[#dc2626] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+      </svg>
+      <p class="text-sm text-[#dc2626]">
+        Your last payment failed. Please contact support to update your payment method.
+      </p>
+    </div>
+  {% endif %}
+
+  <!-- ── Trial state ── -->
+  {% if is_trial %}
+    <div class="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+      <h2 class="text-base font-semibold text-gray-900 mb-4">Free Trial Usage</h2>
+
+      <!-- Progress bar -->
+      <div class="flex items-center gap-3 mb-2">
+        <div class="flex-1 bg-gray-200 rounded-full h-2.5 overflow-hidden">
+          <div class="bg-[#d97706] h-2.5 rounded-full transition-all duration-500"
+               style="width: {{ ((trial_uploads_used / TRIAL_UPLOAD_LIMIT) * 100) | int }}%"></div>
+        </div>
+        <span class="text-sm font-medium text-gray-700 whitespace-nowrap">
+          {{ trial_uploads_used }} of {{ TRIAL_UPLOAD_LIMIT }} free uploads used
+        </span>
+      </div>
+      <p class="text-xs text-gray-500">
+        Your free trial includes {{ TRIAL_UPLOAD_LIMIT }} case uploads at no charge.
+      </p>
+    </div>
+
+    <!-- Upgrade card -->
+    <div class="bg-white rounded-lg border border-[#2563eb] p-6 mb-6">
+      <div class="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h2 class="text-base font-semibold text-gray-900 mb-1">ChartLens Pro</h2>
+          <p class="text-sm text-gray-500 mb-3">
+            Unlimited case uploads, full AI pipeline, PDF &amp; Excel exports.
+          </p>
+          <p class="text-2xl font-bold text-[#1e3a5f]">$149<span class="text-base font-normal text-gray-500">/month</span></p>
+        </div>
+      </div>
+
+      <div id="upgrade-error" class="hidden mt-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-[#dc2626]"></div>
+
+      <button id="upgrade-btn"
+              class="mt-5 inline-flex items-center gap-2 bg-[#2563eb] hover:bg-blue-700 text-white
+                     text-sm font-semibold px-5 py-2.5 rounded-md transition-colors">
+        Upgrade to Pro &mdash; $149/month
+      </button>
+    </div>
+
+  <!-- ── Active subscription state ── -->
+  {% elif subscription_status == 'active' %}
+    <div class="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-9 h-9 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+          <svg class="w-5 h-5 text-[#16a34a]" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <div>
+          <h2 class="text-base font-semibold text-gray-900">ChartLens Pro</h2>
+          <p class="text-sm text-[#16a34a]">Your subscription is active.</p>
+        </div>
+      </div>
+
+      <p class="text-sm text-gray-600 mb-5">
+        You have full access to unlimited case uploads, AI extraction, and all report downloads.
+      </p>
+
+      <div id="cancel-error" class="hidden mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-[#dc2626]"></div>
+
+      <button id="cancel-btn"
+              class="inline-flex items-center gap-2 bg-white border border-gray-300 hover:bg-gray-50
+                     text-gray-700 text-sm font-semibold px-4 py-2 rounded-md transition-colors">
+        Cancel Subscription
+      </button>
+    </div>
+
+  <!-- ── Canceled state ── -->
+  {% elif subscription_status == 'canceled' %}
+    <div class="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+      <h2 class="text-base font-semibold text-gray-900 mb-2">Your plan has been canceled.</h2>
+      <p class="text-sm text-gray-500 mb-5">
+        You can reactivate ChartLens Pro at any time to regain full access.
+      </p>
+
+      <div id="upgrade-error" class="hidden mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-[#dc2626]"></div>
+
+      <button id="upgrade-btn"
+              class="inline-flex items-center gap-2 bg-[#2563eb] hover:bg-blue-700 text-white
+                     text-sm font-semibold px-5 py-2.5 rounded-md transition-colors">
+        Upgrade to Pro &mdash; $149/month
+      </button>
+    </div>
+  {% endif %}
+
+  <!-- ── Back link ── -->
+  <a href="/dashboard" class="text-sm text-[#2563eb] hover:underline">← Back to Dashboard</a>
+
+</div>
+
+<script>
+  (function () {
+    var upgradeBtn = document.getElementById('upgrade-btn');
+    var cancelBtn  = document.getElementById('cancel-btn');
+
+    if (upgradeBtn) {
+      upgradeBtn.addEventListener('click', function () {
+        var errBox = document.getElementById('upgrade-error');
+        upgradeBtn.disabled = true;
+        upgradeBtn.textContent = 'Redirecting…';
+
+        fetch('/billing/subscribe', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' }
+        })
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            if (data.checkout_url) {
+              window.location = data.checkout_url;
+            } else {
+              throw new Error(data.detail || 'Could not start checkout. Please try again.');
+            }
+          })
+          .catch(function (err) {
+            errBox.textContent = err.message || 'An unexpected error occurred.';
+            errBox.classList.remove('hidden');
+            upgradeBtn.disabled = false;
+            upgradeBtn.textContent = 'Upgrade to Pro — $149/month';
+          });
+      });
+    }
+
+    if (cancelBtn) {
+      cancelBtn.addEventListener('click', function () {
+        var confirmed = confirm(
+          'Are you sure? You will lose access at the end of the billing period.'
+        );
+        if (!confirmed) return;
+
+        var errBox = document.getElementById('cancel-error');
+        cancelBtn.disabled = true;
+        cancelBtn.textContent = 'Canceling…';
+
+        fetch('/billing/cancel', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' }
+        })
+          .then(function (r) {
+            if (r.ok) {
+              window.location.reload();
+            } else {
+              return r.json().then(function (data) {
+                throw new Error(data.detail || 'Cancellation failed. Please try again.');
+              });
+            }
+          })
+          .catch(function (err) {
+            errBox.textContent = err.message || 'An unexpected error occurred.';
+            errBox.classList.remove('hidden');
+            cancelBtn.disabled = false;
+            cancelBtn.textContent = 'Cancel Subscription';
+          });
+      });
+    }
+  }());
+</script>
+
+{% endblock %}

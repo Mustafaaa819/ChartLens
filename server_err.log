@@ -1,0 +1,25 @@
+2026-06-01 19:40:04 | INFO     | chartlens | Router 'routes.auth' mounted at '/'
+2026-06-01 19:40:05 | INFO     | chartlens | Router 'routes.cases' mounted at '/'
+2026-06-01 19:40:05 | INFO     | chartlens | Router 'routes.reports' mounted at '/reports'
+INFO:     Started server process [18424]
+INFO:     Waiting for application startup.
+2026-06-01 19:40:05 | INFO     | chartlens | ChartLens starting up — initialising database …
+2026-06-01 19:40:05 | INFO     | models.database | Database tables created / verified.
+2026-06-01 19:40:05 | INFO     | chartlens | Database ready. ChartLens is live.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+2026-06-01 19:40:20 | INFO     | routes.auth | New user registered: test@smithlaw.com | firm: Smith & Associates PI Law
+2026-06-01 19:40:20 | INFO     | core.analyzer | analyze_case: 8 pages \u2192 1 chunks | 5759ab00-81cb-4e31-9c2a-d5ecb39be8b6.pdf
+2026-06-01 19:40:50 | INFO     | httpx | HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-06-01 19:40:50 | INFO     | core.claude_client | Chunk 0 extracted 13 event(s) (pages 1–8)
+2026-06-01 19:40:50 | INFO     | core.analyzer | analyze_case complete: 1/1 chunks ok, 13 events extracted
+2026-06-01 19:41:01 | INFO     | httpx | HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-06-01 19:41:01 | INFO     | core.claude_client | Inconsistency detection found 4 issue(s), risk=medium
+2026-06-01 19:41:01 | INFO     | core.inconsistency_detector | Inconsistency detection complete: 4 total, 0 high-severity
+2026-06-01 19:41:01 | INFO     | core.report_generator | PDF report written to F:\PythonProjects\ChartLens\reports\93bc065d-77fa-468c-9475-194a310ee677\report.pdf
+2026-06-01 19:41:01 | INFO     | core.report_generator | Excel report written to F:\PythonProjects\ChartLens\reports\93bc065d-77fa-468c-9475-194a310ee677\report.xlsx
+2026-06-01 19:41:01 | INFO     | routes.cases | run_analysis_pipeline complete: case=93bc065d-77fa-468c-9475-194a310ee677 events=13
+2026-06-01 19:41:01 | INFO     | routes.reports | Serving PDF report for case 93bc065d-77fa-468c-9475-194a310ee677 to user test@smithlaw.com
+2026-06-01 19:41:01 | INFO     | routes.reports | Serving Excel report for case 93bc065d-77fa-468c-9475-194a310ee677 to user test@smithlaw.com
+2026-06-01 19:41:01 | ERROR    | core.pdf_extractor | fitz.open failed for '32971338-e62c-48ab-af90-72078622d1e8.pdf': Failed to open file 'F:\\PythonProjects\\ChartLens\\uploads\\32971338-e62c-48ab-af90-72078622d1e8.pdf'.
+2026-06-01 19:41:46 | INFO     | routes.auth | User logged in: test@smithlaw.com

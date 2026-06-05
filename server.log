@@ -1,0 +1,23 @@
+INFO:     127.0.0.1:6485 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:6493 - "POST /auth/register HTTP/1.1" 302 Found
+INFO:     127.0.0.1:6493 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:6493 - "GET /upload HTTP/1.1" 200 OK
+INFO:     127.0.0.1:6493 - "POST /cases/upload HTTP/1.1" 302 Found
+INFO:     127.0.0.1:6493 - "GET /cases/93bc065d-77fa-468c-9475-194a310ee677 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:6493 - "GET /cases/93bc065d-77fa-468c-9475-194a310ee677/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:6493 - "GET /cases/93bc065d-77fa-468c-9475-194a310ee677/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:6493 - "GET /cases/93bc065d-77fa-468c-9475-194a310ee677/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:6502 - "GET /cases/93bc065d-77fa-468c-9475-194a310ee677/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:6502 - "GET /cases/93bc065d-77fa-468c-9475-194a310ee677/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:6502 - "GET /cases/93bc065d-77fa-468c-9475-194a310ee677/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:10843 - "GET /cases/93bc065d-77fa-468c-9475-194a310ee677/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:10843 - "GET /cases/93bc065d-77fa-468c-9475-194a310ee677/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:10843 - "GET /cases/93bc065d-77fa-468c-9475-194a310ee677 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:10843 - "GET /reports/93bc065d-77fa-468c-9475-194a310ee677/pdf HTTP/1.1" 200 OK
+INFO:     127.0.0.1:10843 - "GET /reports/93bc065d-77fa-468c-9475-194a310ee677/excel HTTP/1.1" 200 OK
+INFO:     127.0.0.1:10843 - "POST /cases/upload HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:10843 - "POST /cases/upload HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:7384 - "POST /auth/login HTTP/1.1" 302 Found
+INFO:     127.0.0.1:7384 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:7384 - "GET /cases HTTP/1.1" 200 OK
+INFO:     127.0.0.1:7384 - "GET /reports/93bc065d-77fa-468c-9475-194a310ee677/json HTTP/1.1" 200 OK

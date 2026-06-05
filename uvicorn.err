@@ -1,0 +1,196 @@
+INFO:     Will watch for changes in these directories: ['F:\\PythonProjects\\ChartLens']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [47000] using WatchFiles
+2026-05-28 12:12:44 | INFO     | chartlens | Router 'routes.auth' mounted at '/auth'
+2026-05-28 12:12:44 | INFO     | chartlens | Router 'routes.cases' mounted at '/'
+2026-05-28 12:12:44 | INFO     | chartlens | Router 'routes.reports' mounted at '/reports'
+INFO:     Started server process [49928]
+INFO:     Waiting for application startup.
+2026-05-28 12:12:44 | INFO     | chartlens | ChartLens starting up — initialising database …
+ERROR:    Traceback (most recent call last):
+  File "F:\PythonProjects\ChartLens\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "F:\PythonProjects\ChartLens\.venv\Lib\site-packages\sqlalchemy\engine\default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.OperationalError: index ix_users_email already exists
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "F:\PythonProjects\ChartLens\.venv\Lib\site-packages\starlette\routing.py", line 693, in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "F:\PythonProjects\ChartLens\.venv\Lib\site-packages\fastapi\routing.py", line 133, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "F:\PythonProjects\ChartLens\.venv\Lib\site-packages\fastapi\routing.py", line 133, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "F:\PythonProjects\ChartLens\.venv\Lib\site-packages\fastapi\routing.py", line 133, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "F:\PythonProjects\ChartLens\app.py", line 45, in lifespan
+    await init_db()
+  File "F:\PythonProjects\ChartLens\models\database.py", line 43, in init_db
+    Base.metadata.create_all(bind=engine)
+  File "F:\PythonProjects\ChartLens\.venv\Lib\site-packages\sqlalchemy\sql\schema.py", line 5868, in create_all
+    bind._run_ddl_visitor(
+  File "F:\PythonProjects\ChartLens\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 3253, in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+  File "F:\PythonProjects\ChartLens\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2459, in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+  File "F:\PythonProjects\ChartLens\.venv\Lib\site-packages\sqlalchemy\sql\visitors.py", line 664, in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+  File "F:\PythonProjects\ChartLens\.venv\Lib\site-packages\sqlalchemy\sql\ddl.py", line 918, in visit_metadata
+    self.traverse_single(
+  File "F:\PythonProjects\ChartLens\.venv\Lib\site-packages\sqlalchemy\sql\visitors.py", line 664, in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+  File "F:\PythonProjects\ChartLens\.venv\Lib\site-packages\sqlalchemy\sql\ddl.py", line 960, in visit_table
+    self.traverse_single(index, create_ok=True)
+  File "F:\PythonProjects\ChartLens\.venv\Lib\site-packages\sqlalchemy\sql\visitors.py", line 664, in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+  File "F:\PythonProjects\ChartLens\.venv\Lib\site-packages\sqlalchemy\sql\ddl.py", line 997, in visit_index
+    CreateIndex(index)._invoke_with(self.connection)
+  File "F:\PythonProjects\ChartLens\.venv\Lib\site-packages\sqlalchemy\sql\ddl.py", line 314, in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+  File "F:\PythonProjects\ChartLens\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "F:\PythonProjects\ChartLens\.venv\Lib\site-packages\sqlalchemy\sql\ddl.py", line 180, in _execute_on_connection
+    return connection._execute_ddl(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\PythonProjects\ChartLens\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1529, in _execute_ddl
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\PythonProjects\ChartLens\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\PythonProjects\ChartLens\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "F:\PythonProjects\ChartLens\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "F:\PythonProjects\ChartLens\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "F:\PythonProjects\ChartLens\.venv\Lib\site-packages\sqlalchemy\engine\default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) index ix_users_email already exists
+[SQL: CREATE UNIQUE INDEX ix_users_email ON users (email)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+
+ERROR:    Application startup failed. Exiting.
+WARNING:  WatchFiles detected changes in 'models\user.py'. Reloading...
+2026-05-28 12:13:44 | INFO     | chartlens | Router 'routes.auth' mounted at '/auth'
+2026-05-28 12:13:44 | INFO     | chartlens | Router 'routes.cases' mounted at '/'
+2026-05-28 12:13:44 | INFO     | chartlens | Router 'routes.reports' mounted at '/reports'
+INFO:     Started server process [15988]
+INFO:     Waiting for application startup.
+2026-05-28 12:13:44 | INFO     | chartlens | ChartLens starting up — initialising database …
+2026-05-28 12:13:44 | INFO     | models.database | Database tables created / verified.
+2026-05-28 12:13:44 | INFO     | chartlens | Database ready. ChartLens is live.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'models\user.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-28 12:13:46 | INFO     | chartlens | ChartLens shutting down. Goodbye.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [15988]
+2026-05-28 12:13:47 | INFO     | chartlens | Router 'routes.auth' mounted at '/auth'
+2026-05-28 12:13:47 | INFO     | chartlens | Router 'routes.cases' mounted at '/'
+2026-05-28 12:13:47 | INFO     | chartlens | Router 'routes.reports' mounted at '/reports'
+INFO:     Started server process [12444]
+INFO:     Waiting for application startup.
+2026-05-28 12:13:47 | INFO     | chartlens | ChartLens starting up — initialising database …
+2026-05-28 12:13:47 | INFO     | models.database | Database tables created / verified.
+2026-05-28 12:13:47 | INFO     | chartlens | Database ready. ChartLens is live.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in '.venv\Lib\site-packages\pyasn1\codec\native\decoder.py', '.venv\Lib\site-packages\six.py', '.venv\Lib\site-packages\rsa\core.py', '.venv\Lib\site-packages\pyasn1\debug.py', '.venv\Lib\site-packages\pyasn1\compat\integer.py', '.venv\Lib\site-packages\pyasn1\codec\__init__.py', '.venv\Lib\site-packages\pycparser\_ast_gen.py', '.venv\Lib\site-packages\rsa\pkcs1.py', '.venv\Lib\site-packages\pyasn1\codec\native\encoder.py', '.venv\Lib\site-packages\rsa\transform.py', '.venv\Lib\site-packages\pycparser\c_lexer.py', '.venv\Lib\site-packages\rsa\asn1.py', '.venv\Lib\site-packages\pyasn1\type\univ.py', '.venv\Lib\site-packages\rsa\key.py', '.venv\Lib\site-packages\rsa\prime.py', '.venv\Lib\site-packages\pyasn1\codec\cer\encoder.py', '.venv\Lib\site-packages\pyasn1\type\error.py', '.venv\Lib\site-packages\pyasn1\type\tag.py', '.venv\Lib\site-packages\rsa\cli.py', '.venv\Lib\site-packages\pyasn1\type\char.py', '.venv\Lib\site-packages\rsa\parallel.py', '.venv\Lib\site-packages\pyasn1\type\__init__.py', '.venv\Lib\site-packages\pyasn1\codec\ber\decoder.py', '.venv\Lib\site-packages\pyasn1\codec\der\decoder.py', '.venv\Lib\site-packages\pyasn1\codec\cer\decoder.py', '.venv\Lib\site-packages\rsa\util.py', '.venv\Lib\site-packages\pyasn1\codec\der\encoder.py', '.venv\Lib\site-packages\pyasn1\codec\native\__init__.py', '.venv\Lib\site-packages\pyasn1\type\tagmap.py', '.venv\Lib\site-packages\pyasn1\type\constraint.py', '.venv\Lib\site-packages\pycparser\c_ast.py', '.venv\Lib\site-packages\pyasn1\compat\__init__.py', '.venv\Lib\site-packages\pyasn1\codec\ber\eoo.py', '.venv\Lib\site-packages\pycparser\__init__.py', '.venv\Lib\site-packages\bcrypt\__init__.py', '.venv\Lib\site-packages\pyasn1\type\useful.py', '.venv\Lib\site-packages\pyasn1\type\namedtype.py', '.venv\Lib\site-packages\pycparser\c_generator.py', '.venv\Lib\site-packages\pyasn1\codec\streaming.py', '.venv\Lib\site-packages\pyasn1\codec\cer\__init__.py', '.venv\Lib\site-packages\rsa\randnum.py', '.venv\Lib\site-packages\rsa\pkcs1_v2.py', '.venv\Lib\site-packages\pyasn1\type\base.py', '.venv\Lib\site-packages\pyasn1\__init__.py', '.venv\Lib\site-packages\pyasn1\codec\ber\encoder.py', '.venv\Lib\site-packages\rsa\pem.py', '.venv\Lib\site-packages\pyasn1\type\opentype.py', '.venv\Lib\site-packages\rsa\common.py', '.venv\Lib\site-packages\pycparser\c_parser.py', '.venv\Lib\site-packages\pyasn1\codec\der\__init__.py', '.venv\Lib\site-packages\pyasn1\codec\ber\__init__.py', '.venv\Lib\site-packages\pyasn1\type\namedval.py', '.venv\Lib\site-packages\pyasn1\error.py', '.venv\Lib\site-packages\pycparser\ast_transforms.py', '.venv\Lib\site-packages\rsa\__init__.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-28 13:29:14 | INFO     | chartlens | ChartLens shutting down. Goodbye.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [12444]
+2026-05-28 13:29:16 | INFO     | chartlens | Router 'routes.auth' mounted at '/auth'
+2026-05-28 13:29:16 | INFO     | chartlens | Router 'routes.cases' mounted at '/'
+2026-05-28 13:29:16 | INFO     | chartlens | Router 'routes.reports' mounted at '/reports'
+INFO:     Started server process [9456]
+INFO:     Waiting for application startup.
+2026-05-28 13:29:16 | INFO     | chartlens | ChartLens starting up — initialising database …
+2026-05-28 13:29:16 | INFO     | models.database | Database tables created / verified.
+2026-05-28 13:29:16 | INFO     | chartlens | Database ready. ChartLens is live.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'core\pdf_extractor.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-28 13:48:55 | INFO     | chartlens | ChartLens shutting down. Goodbye.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [9456]
+2026-05-28 13:48:57 | INFO     | chartlens | Router 'routes.auth' mounted at '/auth'
+2026-05-28 13:48:57 | INFO     | chartlens | Router 'routes.cases' mounted at '/'
+2026-05-28 13:48:57 | INFO     | chartlens | Router 'routes.reports' mounted at '/reports'
+INFO:     Started server process [19188]
+INFO:     Waiting for application startup.
+2026-05-28 13:48:57 | INFO     | chartlens | ChartLens starting up — initialising database …
+2026-05-28 13:48:57 | INFO     | models.database | Database tables created / verified.
+2026-05-28 13:48:57 | INFO     | chartlens | Database ready. ChartLens is live.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'core\chunker.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-28 17:23:34 | INFO     | chartlens | ChartLens shutting down. Goodbye.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [19188]
+2026-05-28 17:23:37 | INFO     | chartlens | Router 'routes.auth' mounted at '/auth'
+2026-05-28 17:23:37 | INFO     | chartlens | Router 'routes.cases' mounted at '/'
+2026-05-28 17:23:37 | INFO     | chartlens | Router 'routes.reports' mounted at '/reports'
+INFO:     Started server process [16304]
+INFO:     Waiting for application startup.
+2026-05-28 17:23:37 | INFO     | chartlens | ChartLens starting up — initialising database …
+2026-05-28 17:23:37 | INFO     | models.database | Database tables created / verified.
+2026-05-28 17:23:37 | INFO     | chartlens | Database ready. ChartLens is live.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'core\claude_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-28 17:36:41 | INFO     | chartlens | ChartLens shutting down. Goodbye.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [16304]
+2026-05-28 17:36:43 | INFO     | chartlens | Router 'routes.auth' mounted at '/auth'
+2026-05-28 17:36:43 | INFO     | chartlens | Router 'routes.cases' mounted at '/'
+2026-05-28 17:36:43 | INFO     | chartlens | Router 'routes.reports' mounted at '/reports'
+INFO:     Started server process [40112]
+INFO:     Waiting for application startup.
+2026-05-28 17:36:43 | INFO     | chartlens | ChartLens starting up — initialising database …
+2026-05-28 17:36:43 | INFO     | models.database | Database tables created / verified.
+2026-05-28 17:36:43 | INFO     | chartlens | Database ready. ChartLens is live.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'models\database.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-05-28 17:58:05 | INFO     | chartlens | ChartLens shutting down. Goodbye.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [40112]
+2026-05-28 17:58:07 | INFO     | chartlens | Router 'routes.auth' mounted at '/auth'
+2026-05-28 17:58:07 | INFO     | chartlens | Router 'routes.cases' mounted at '/'
+2026-05-28 17:58:07 | INFO     | chartlens | Router 'routes.reports' mounted at '/reports'
+INFO:     Started server process [43888]
+INFO:     Waiting for application startup.
+2026-05-28 17:58:07 | INFO     | chartlens | ChartLens starting up — initialising database …
+2026-05-28 17:58:07 | INFO     | models.database | Database tables created / verified.
+2026-05-28 17:58:07 | INFO     | chartlens | Database ready. ChartLens is live.
+INFO:     Application startup complete.
