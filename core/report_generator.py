@@ -20,7 +20,8 @@ from openpyxl.utils import get_column_letter
 
 logger = logging.getLogger(__name__)
 
-_CHRON_COL_WIDTHS = [0.85 * inch, 1.5 * inch, 0.9 * inch, 2.10 * inch, 0.75 * inch, 0.9 * inch]
+# Date, Provider, Visit Type, Diagnosis, Billed, Confidence — in points
+_CHRON_COL_WIDTHS = [65, 130, 70, 150, 55, 50]
 
 
 def _make_styles() -> dict:
@@ -96,8 +97,8 @@ def _pdf_chronology_flowables(chronology: dict, styles: dict) -> list:
         billed = float(event.get("billed_amount") or 0.0)
         table_data.append([
             event.get("date") or "-",
-            event.get("provider_name") or "-",
-            event.get("visit_type") or "-",
+            Paragraph(event.get("provider_name") or "-", styles["small"]),
+            Paragraph(event.get("visit_type") or "-", styles["small"]),
             Paragraph(diag_str, styles["small"]),
             f"${billed:,.2f}",
             (event.get("confidence") or "-").capitalize(),
@@ -113,6 +114,7 @@ def _pdf_chronology_flowables(chronology: dict, styles: dict) -> list:
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
         ("TOPPADDING", (0, 0), (-1, -1), 3),
         ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+        ("WORDWRAP", (0, 0), (-1, -1), True),
     ]))
     flowables.append(tbl)
 
