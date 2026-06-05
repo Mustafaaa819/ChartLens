@@ -86,8 +86,8 @@ def _attach_auth_cookie(response: RedirectResponse, token: str) -> None:
         key=COOKIE_NAME,
         value=token,
         httponly=True,
+        secure=True,
         samesite="lax",
-        secure=False,           # set True behind HTTPS in production
         max_age=ACCESS_TOKEN_EXPIRE_HOURS * 3600,
     )
 
