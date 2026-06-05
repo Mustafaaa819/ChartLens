@@ -1,3 +1,13 @@
+---
+title: ChartLens
+emoji: 🏥
+colorFrom: blue
+colorTo: navy
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # ChartLens
 
 > AI-powered medical record chronology for solo personal injury attorneys.
