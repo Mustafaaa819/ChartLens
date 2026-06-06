@@ -20,7 +20,8 @@ logger = logging.getLogger(__name__)
 HF_TOKEN        = os.getenv("HF_TOKEN", "")
 HF_DATASET_REPO = os.getenv("HF_DATASET_REPO", "")
 DB_FILENAME     = "chartlens.db"
-DB_PATH         = Path(DB_FILENAME)
+_DATABASE_URL   = os.getenv("DATABASE_URL", "sqlite:////data/chartlens.db")
+DB_PATH         = Path(_DATABASE_URL.replace("sqlite:///", ""))
 REPO_DB_PATH    = "chartlens.db"   # path inside the dataset repo
 
 _push_lock = threading.Lock()
@@ -101,6 +102,12 @@ def push_db() -> bool:
     api = _get_api()
     if api is None:
         return False
+
+    try:
+        from models.database import engine
+        engine.dispose()
+    except Exception as exc:
+        logger.warning("db_sync: engine.dispose() failed — %s", exc)
 
     with _push_lock:
         try:

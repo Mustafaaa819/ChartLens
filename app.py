@@ -44,7 +44,10 @@ TEMPLATES_DIR = BASE_DIR / "templates"
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Startup and shutdown logic."""
-    logger.info("ChartLens starting up — initialising database …")
+    from db_sync import pull_db
+    logger.info("ChartLens starting up — restoring database from remote …")
+    pull_db()
+    logger.info("Database restore complete. Initialising tables …")
     await init_db()
     logger.info("Database ready. ChartLens is live.")
     yield
