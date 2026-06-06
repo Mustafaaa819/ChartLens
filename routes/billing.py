@@ -50,7 +50,7 @@ async def billing_page(
         "billing.html",
         {
             "request": request,
-            "user": current_user,
+            "current_user": current_user,
             "subscription_status": current_user.subscription_status,
             "is_trial": current_user.subscription_status == "trial",
             "trial_uploads_used": current_user.trial_cases_used,
@@ -123,7 +123,7 @@ async def billing_success(
     """Render the post-payment success page."""
     return templates.TemplateResponse(
         "billing_success.html",
-        {"request": request, "user": current_user},
+        {"request": request, "current_user": current_user},
     )
 
 
@@ -140,7 +140,7 @@ async def billing_cancel_page(
     """Render the cancelled-payment page."""
     return templates.TemplateResponse(
         "billing_cancel.html",
-        {"request": request, "user": current_user},
+        {"request": request, "current_user": current_user},
     )
 
 
