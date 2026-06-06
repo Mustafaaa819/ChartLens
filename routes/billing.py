@@ -40,7 +40,7 @@ def _ls_headers(api_key: str) -> dict:
 # ---------------------------------------------------------------------------
 
 
-@router.get("/")
+@router.get("")
 async def billing_page(
     request: Request,
     current_user: User = Depends(get_current_user),
