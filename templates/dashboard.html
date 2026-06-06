@@ -1,148 +1,142 @@
-{% extends "base.html" %}
+{% extends "base_app.html" %}
 
 {% block title %}Dashboard — ChartLens{% endblock %}
 
+{% block page_title %}Good morning, Counselor.{% endblock %}
+{% block page_subtitle %}
+  <p class="text-sm text-gray-400 mt-0.5 font-body">
+    {{ cases | length }} case{{ 's' if cases | length != 1 else '' }} on file
+  </p>
+{% endblock %}
+
 {% block content %}
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-  <!-- ── Header row ── -->
-  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+  <!-- Stat cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
 
-    <div class="flex items-center gap-3 flex-wrap min-w-0">
-      <h1 class="text-2xl font-bold text-[#1e3a5f] truncate">
-        Welcome, {{ current_user.firm_name }}
-      </h1>
-
-      <!-- Subscription status badge -->
-      {% set trial_remaining = 3 - current_user.trial_cases_used %}
-      {% if current_user.subscription_status == 'trial' and trial_remaining > 0 %}
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
-                     bg-amber-100 text-[#d97706] border border-amber-200 whitespace-nowrap">
-          Free Trial &mdash; {{ current_user.trial_cases_used }} of 3 cases used
-        </span>
-      {% elif current_user.subscription_status == 'trial' and trial_remaining <= 0 %}
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
-                     bg-red-100 text-[#dc2626] border border-red-200 whitespace-nowrap">
-          Trial Ended
-        </span>
-        <a href="/billing"
-           class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
-                  bg-[#2563eb] text-white hover:bg-blue-700 transition-colors whitespace-nowrap">
-          Upgrade Now
-        </a>
-      {% elif current_user.subscription_status == 'active' %}
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
-                     bg-green-100 text-[#16a34a] border border-green-200 whitespace-nowrap">
-          Pro &mdash; Active
-        </span>
-      {% elif current_user.subscription_status in ('cancelled', 'canceled') %}
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
-                     bg-red-100 text-[#dc2626] border border-red-200 whitespace-nowrap">
-          Subscription Cancelled
-        </span>
-        <a href="/billing"
-           class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
-                  bg-[#2563eb] text-white hover:bg-blue-700 transition-colors whitespace-nowrap">
-          Resubscribe
-        </a>
-      {% elif current_user.subscription_status == 'past_due' %}
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
-                     bg-red-100 text-[#dc2626] border border-red-200 whitespace-nowrap">
-          Payment Failed
-        </span>
-        <a href="/billing"
-           class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
-                  bg-[#2563eb] text-white hover:bg-blue-700 transition-colors whitespace-nowrap">
-          Update Billing
-        </a>
-      {% endif %}
+    <!-- Cases Analyzed -->
+    <div class="bg-white rounded border border-rule-line px-5 py-4">
+      <p class="text-[10px] font-semibold uppercase tracking-[0.08em] text-gray-400 mb-2">
+        Cases Analyzed
+      </p>
+      <p class="font-display text-3xl font-bold text-navy">
+        {{ cases | length }}
+      </p>
+      <p class="text-xs text-gray-400 mt-1">Total uploads on your account</p>
     </div>
 
-    <!-- Primary CTA -->
-    <a href="/upload"
-       class="inline-flex items-center gap-2 bg-[#2563eb] hover:bg-blue-700 text-white
-              text-sm font-semibold px-5 py-2.5 rounded-md transition-colors whitespace-nowrap flex-shrink-0">
-      <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-      </svg>
-      Upload New Case
-    </a>
+    <!-- Inconsistencies Found -->
+    <div class="bg-white rounded border border-rule-line px-5 py-4">
+      <p class="text-[10px] font-semibold uppercase tracking-[0.08em] text-gray-400 mb-2">
+        Inconsistencies Found
+      </p>
+      <p class="font-display text-3xl font-bold text-navy">
+        {{ cases | selectattr('status', 'equalto', 'complete') | list | length }}
+      </p>
+      <p class="text-xs text-gray-400 mt-1">Across all completed cases</p>
+    </div>
+
+    <!-- Reports Generated -->
+    <div class="bg-white rounded border border-rule-line px-5 py-4">
+      <p class="text-[10px] font-semibold uppercase tracking-[0.08em] text-gray-400 mb-2">
+        Reports Generated
+      </p>
+      <p class="font-display text-3xl font-bold text-navy">
+        {{ cases | selectattr('status', 'equalto', 'complete') | list | length }}
+      </p>
+      <p class="text-xs text-gray-400 mt-1">PDF &amp; Excel ready to download</p>
+    </div>
+
   </div>
 
-  <!-- ── Cases table ── -->
+  <!-- Section label + divider -->
+  <div class="flex items-center justify-between mb-3">
+    <h2 class="text-[10px] font-semibold uppercase tracking-[0.08em] text-gray-400">
+      Recent Cases
+    </h2>
+  </div>
+  <hr class="border-0 border-t border-rule-line mb-4" />
+
+  <!-- Cases table -->
   {% if cases %}
-  <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+  <div class="bg-white rounded border border-rule-line overflow-hidden">
     <div class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
-          <tr>
-            <th scope="col"
-                class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+      <table class="min-w-full">
+        <thead>
+          <tr class="border-b-2 border-navy">
+            <th class="px-6 py-4 text-left text-[10px] font-semibold uppercase
+                       tracking-[0.08em] text-gray-400">
               Client Name
             </th>
-            <th scope="col"
-                class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            <th class="px-6 py-4 text-left text-[10px] font-semibold uppercase
+                       tracking-[0.08em] text-gray-400">
               Case Number
             </th>
-            <th scope="col"
-                class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            <th class="px-6 py-4 text-left text-[10px] font-semibold uppercase
+                       tracking-[0.08em] text-gray-400">
               Date Uploaded
             </th>
-            <th scope="col"
-                class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            <th class="px-6 py-4 text-left text-[10px] font-semibold uppercase
+                       tracking-[0.08em] text-gray-400">
               Status
             </th>
-            <th scope="col"
-                class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            <th class="px-6 py-4 text-left text-[10px] font-semibold uppercase
+                       tracking-[0.08em] text-gray-400">
               Actions
             </th>
           </tr>
         </thead>
-        <tbody class="bg-white divide-y divide-gray-100">
+        <tbody class="divide-y divide-rule-line">
           {% for case in cases %}
-          <tr class="hover:bg-gray-50 transition-colors">
+          <tr class="hover:bg-[#faf8f4] transition-colors">
 
-            <!-- Client Name -->
-            <td class="px-6 py-4 text-sm font-medium text-gray-900 max-w-[200px] truncate">
+            <td class="px-6 py-4 text-sm font-semibold text-navy
+                       max-w-[200px] truncate">
               {{ case.client_name }}
             </td>
 
-            <!-- Case Number -->
             <td class="px-6 py-4 text-sm text-gray-500">
-              {{ case.case_number if case.case_number else '&mdash;' }}
+              {{ case.case_number if case.case_number else '—' }}
             </td>
 
-            <!-- Date Uploaded -->
-            <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
+            <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap
+                       tabular-nums">
               {{ case.created_at | datefmt }}
             </td>
 
-            <!-- Status -->
             <td class="px-6 py-4">
               {% if case.status == 'uploading' %}
                 <span class="inline-flex items-center gap-1.5 text-sm text-gray-500">
-                  <svg width="16" height="16" class="animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                  <svg width="14" height="14" class="animate-spin text-gray-400"
+                       fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10"
+                            stroke="currentColor" stroke-width="4"/>
+                    <path class="opacity-75" fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
                   </svg>
                   Uploading
                 </span>
               {% elif case.status == 'processing' %}
-                <span class="inline-flex items-center gap-1.5 text-sm text-[#2563eb]">
-                  <svg width="16" height="16" class="animate-spin" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                <span class="inline-flex items-center gap-1.5 text-sm text-action-blue">
+                  <svg width="14" height="14" class="animate-spin"
+                       fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10"
+                            stroke="currentColor" stroke-width="4"/>
+                    <path class="opacity-75" fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
                   </svg>
                   Processing
                 </span>
               {% elif case.status == 'complete' %}
                 <span class="inline-flex items-center gap-1.5 text-sm text-[#16a34a]">
-                  <span class="w-2 h-2 rounded-full bg-[#16a34a] flex-shrink-0"></span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#16a34a]
+                               flex-shrink-0"></span>
                   Complete
                 </span>
               {% elif case.status == 'failed' %}
                 <span class="inline-flex items-center gap-1.5 text-sm text-[#dc2626]">
-                  <span class="w-2 h-2 rounded-full bg-[#dc2626] flex-shrink-0"></span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#dc2626]
+                               flex-shrink-0"></span>
                   Failed
                 </span>
               {% else %}
@@ -150,29 +144,32 @@
               {% endif %}
             </td>
 
-            <!-- Actions -->
             <td class="px-6 py-4">
               {% if case.status == 'complete' %}
                 <div class="flex items-center gap-2 flex-wrap">
                   <a href="/cases/{{ case.id }}"
                      class="inline-flex items-center px-3 py-1.5 text-xs font-semibold
-                            text-white bg-[#2563eb] hover:bg-blue-700 rounded-md transition-colors">
+                            text-white bg-action-blue hover:bg-blue-700 rounded
+                            transition-colors">
                     View Results
                   </a>
                   <a href="/reports/{{ case.id }}/pdf"
                      class="inline-flex items-center px-3 py-1.5 text-xs font-semibold
-                            text-[#1e3a5f] bg-blue-50 hover:bg-blue-100 rounded-md transition-colors border border-blue-200">
+                            text-navy bg-blue-50 hover:bg-blue-100 rounded
+                            transition-colors border border-blue-200">
                     PDF
                   </a>
                   <a href="/reports/{{ case.id }}/excel"
                      class="inline-flex items-center px-3 py-1.5 text-xs font-semibold
-                            text-[#16a34a] bg-green-50 hover:bg-green-100 rounded-md transition-colors border border-green-200">
+                            text-[#16a34a] bg-green-50 hover:bg-green-100 rounded
+                            transition-colors border border-green-200">
                     Excel
                   </a>
                   <button type="button"
                           onclick="deleteCase('{{ case.id }}')"
                           class="inline-flex items-center px-3 py-1.5 text-xs font-semibold
-                                 text-[#dc2626] bg-red-50 hover:bg-red-100 rounded-md transition-colors border border-red-200">
+                                 text-[#dc2626] bg-red-50 hover:bg-red-100 rounded
+                                 transition-colors border border-red-200">
                     Delete
                   </button>
                 </div>
@@ -180,11 +177,12 @@
                 <button type="button"
                         onclick="deleteCase('{{ case.id }}')"
                         class="inline-flex items-center px-3 py-1.5 text-xs font-semibold
-                               text-[#dc2626] bg-red-50 hover:bg-red-100 rounded-md transition-colors border border-red-200">
+                               text-[#dc2626] bg-red-50 hover:bg-red-100 rounded
+                               transition-colors border border-red-200">
                   Delete
                 </button>
               {% else %}
-                <span class="text-xs text-gray-400 italic">&mdash;</span>
+                <span class="text-xs text-gray-400 italic">—</span>
               {% endif %}
             </td>
 
@@ -196,31 +194,39 @@
   </div>
 
   {% else %}
-  <!-- ── Empty state ── -->
-  <div class="flex flex-col items-center justify-center py-20 text-center">
-    <div class="w-16 h-16 mb-6 rounded-full bg-blue-50 flex items-center justify-center">
-      <svg width="32" height="32" class="text-[#2563eb]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <!-- Empty state -->
+  <div class="flex flex-col items-center justify-center py-24 text-center
+              border border-dashed border-rule-line rounded-lg bg-white">
+    <div class="w-14 h-14 mb-5 rounded bg-[#f0ede6] flex items-center justify-center">
+      <svg width="28" height="28" class="text-navy opacity-40" fill="none"
+           stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414
-                 a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586
+                 a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19
+                 a2 2 0 01-2 2z"/>
       </svg>
     </div>
-    <h2 class="text-xl font-semibold text-gray-800 mb-2">No cases yet.</h2>
-    <p class="text-gray-500 mb-8 max-w-sm">
-      Upload your first medical record PDF to get started.
+    <h2 class="font-display text-xl font-semibold text-navy mb-2">
+      No cases yet.
+    </h2>
+    <p class="text-sm text-gray-500 mb-8 max-w-sm">
+      Upload your first medical records PDF to begin
+      extracting your case chronology.
     </p>
     <a href="/upload"
-       class="inline-flex items-center gap-2 bg-[#2563eb] hover:bg-blue-700 text-white
-              font-semibold px-6 py-3 rounded-md transition-colors text-sm">
-      <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+       class="inline-flex items-center gap-2 bg-action-blue hover:bg-blue-700
+              text-white font-semibold px-6 py-2.5 rounded transition-colors text-sm">
+      <svg width="16" height="16" fill="none" stroke="currentColor"
+           viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 4v16m8-8H4"/>
       </svg>
       Upload New Case
     </a>
   </div>
   {% endif %}
 
-</div>
+{% endblock %}
 
 <script>
   function deleteCase(caseId) {
@@ -231,9 +237,6 @@
   }
 
   {% if has_active_cases %}
-  /* Auto-refresh every 5 seconds while any case is uploading or processing */
   setTimeout(function() { window.location.reload(); }, 5000);
   {% endif %}
 </script>
-
-{% endblock %}
