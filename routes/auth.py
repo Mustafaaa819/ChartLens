@@ -11,6 +11,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from config import get_settings
+from db_sync import push_db_async
 from models.database import get_db
 from models.user import User, UserOut
 
@@ -230,6 +231,7 @@ async def register(
         ) from exc
 
     logger.info("New user registered: %s | firm: %s", email, firm_name)
+    push_db_async()
     token = _create_access_token(email)
     response = RedirectResponse(url="/dashboard", status_code=status.HTTP_302_FOUND)
     _attach_auth_cookie(response, token)
@@ -273,6 +275,7 @@ async def login(
         )
 
     logger.info("User logged in: %s", email)
+    push_db_async()
     token = _create_access_token(email)
     response = RedirectResponse(url="/dashboard", status_code=status.HTTP_302_FOUND)
     _attach_auth_cookie(response, token)

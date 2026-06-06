@@ -37,3 +37,6 @@ bcrypt==4.2.0
 
 # Rate limiting
 slowapi==0.1.9
+
+# HF Dataset-backed DB persistence
+huggingface_hub==0.26.2

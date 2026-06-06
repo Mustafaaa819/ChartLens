@@ -6,6 +6,11 @@ from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 from config import get_settings
 
+# Pull DB from HF Dataset repo before engine initializes
+# This ensures persisted data survives container rebuilds
+from db_sync import pull_db
+pull_db()
+
 logger = logging.getLogger(__name__)
 
 

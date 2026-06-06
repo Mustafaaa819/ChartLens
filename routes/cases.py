@@ -13,6 +13,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
 from config import get_settings
+from db_sync import push_db_async
 from core.analyzer import analyze_case
 from core.chronology_builder import build_chronology
 from core.inconsistency_detector import detect_case_inconsistencies
@@ -152,6 +153,7 @@ async def run_analysis_pipeline(case_id: uuid.UUID, pdf_path: str) -> None:
         case.progress_percent = 100
         case.progress_message = "Analysis complete."
         db_bg.commit()
+        push_db_async()
 
         logger.info(
             "run_analysis_pipeline complete: case=%s events=%d",
@@ -365,6 +367,7 @@ async def upload_case(
         db.add(case)
         db.commit()
         db.refresh(case)
+        push_db_async()
     except Exception as exc:
         logger.error("Database error creating case: %s", exc)
         db.rollback()
@@ -375,6 +378,7 @@ async def upload_case(
     try:
         current_user.trial_cases_used += 1
         db.commit()
+        push_db_async()
     except Exception as exc:
         logger.warning("Failed to increment trial_cases_used for user %s: %s", current_user.id, exc)
         db.rollback()
@@ -427,6 +431,7 @@ async def delete_case(
     try:
         db.delete(case)
         db.commit()
+        push_db_async()
     except Exception as exc:
         logger.error("DB error deleting case %s: %s", case_id, exc)
         db.rollback()
