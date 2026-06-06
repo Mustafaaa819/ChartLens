@@ -28,12 +28,12 @@
     <!-- Inconsistencies Found -->
     <div class="bg-white rounded border border-rule-line px-5 py-4">
       <p class="text-[10px] font-semibold uppercase tracking-[0.08em] text-gray-400 mb-2">
-        Inconsistencies Found
+        Cases Complete
       </p>
       <p class="font-display text-3xl font-bold text-navy">
         {{ cases | selectattr('status', 'equalto', 'complete') | list | length }}
       </p>
-      <p class="text-xs text-gray-400 mt-1">Across all completed cases</p>
+      <p class="text-xs text-gray-400 mt-1">Analysis finished, reports ready</p>
     </div>
 
     <!-- Reports Generated -->
