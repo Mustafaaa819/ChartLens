@@ -37,7 +37,7 @@
     body { font-family: 'IBM Plex Sans', system-ui, sans-serif; }
     .font-display { font-family: 'Playfair Display', Georgia, serif; }
 
-    /* Sidebar active state indicator */
+    /* Sidebar active state */
     .nav-item-active {
       background-color: rgba(255,255,255,0.08);
       border-left: 2px solid #ffffff;
@@ -52,252 +52,393 @@
       background-color: rgba(255,255,255,0.05);
     }
     .nav-item:hover span { color: #ffffff; }
+
+    /* Bottom nav active state */
+    .bottom-nav-active svg { color: #2563eb; }
+    .bottom-nav-active span { color: #2563eb; font-weight: 600; }
+
+    /* Prevent content from being hidden behind bottom nav on mobile */
+    @media (max-width: 767px) {
+      .mobile-content-pad { padding-bottom: 5rem; }
+    }
   </style>
   {% block head %}{% endblock %}
 </head>
 
 <body class="bg-paper text-gray-900 min-h-screen font-body">
 
-  <div class="flex min-h-screen">
+<div class="flex min-h-screen">
 
-    <!-- ── SIDEBAR ── -->
-    <aside class="w-[200px] min-h-screen bg-navy flex flex-col flex-shrink-0 fixed top-0 left-0 z-30">
+  <!-- ══════════════════════════════════════════
+       SIDEBAR — hidden on mobile, visible on md+
+       ══════════════════════════════════════════ -->
+  <aside class="hidden md:flex w-[200px] min-h-screen bg-navy
+                flex-col flex-shrink-0 fixed top-0 left-0 z-30">
 
-      <!-- Wordmark -->
-      <div class="px-5 py-6 border-b border-white border-opacity-10">
-        <a href="/dashboard" class="block">
-          <span class="font-display text-xl font-bold text-white tracking-tight">
-            ChartLens
+    <!-- Wordmark -->
+    <div class="px-5 py-6 border-b border-white border-opacity-10">
+      <a href="/dashboard" class="block">
+        <span class="font-display text-xl font-bold text-white
+                     tracking-tight">
+          ChartLens
+        </span>
+        <span class="block text-[10px] font-semibold tracking-[0.12em]
+                     uppercase text-blue-300 opacity-60 mt-0.5">
+          Legal&#8209;Tech
+        </span>
+      </a>
+    </div>
+
+    <!-- New Case CTA -->
+    <div class="px-4 pt-5 pb-3">
+      <a href="/upload"
+         class="flex items-center justify-center gap-2 w-full
+                bg-action-blue hover:bg-blue-600 text-white text-sm
+                font-semibold py-2 px-3 rounded transition-colors">
+        <svg width="14" height="14" fill="none" stroke="currentColor"
+             viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2.5" d="M12 4v16m8-8H4"/>
+        </svg>
+        New Case
+      </a>
+    </div>
+
+    <!-- Nav links -->
+    <nav class="flex-1 px-2 py-2 space-y-0.5">
+
+      <a href="/dashboard"
+         class="nav-item {% if request.url.path == '/dashboard' %}nav-item-active{% endif %}
+                flex items-center gap-3 px-3 py-2.5 rounded-sm
+                transition-colors group">
+        <svg width="16" height="16" fill="none" stroke="currentColor"
+             viewBox="0 0 24 24"
+             class="text-blue-300 flex-shrink-0 group-hover:text-white
+                    transition-colors
+                    {% if request.url.path == '/dashboard' %}text-white{% endif %}">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="1.75"
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2
+                   2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0
+                   011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        <span class="text-sm text-blue-200 transition-colors
+                     {% if request.url.path == '/dashboard' %}text-white font-medium{% endif %}">
+          Dashboard
+        </span>
+      </a>
+
+      <a href="/upload"
+         class="nav-item {% if request.url.path == '/upload' %}nav-item-active{% endif %}
+                flex items-center gap-3 px-3 py-2.5 rounded-sm
+                transition-colors group">
+        <svg width="16" height="16" fill="none" stroke="currentColor"
+             viewBox="0 0 24 24"
+             class="text-blue-300 flex-shrink-0 group-hover:text-white
+                    transition-colors
+                    {% if request.url.path == '/upload' %}text-white{% endif %}">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="1.75"
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0
+                   0L8 8m4-4v12"/>
+        </svg>
+        <span class="text-sm text-blue-200 transition-colors
+                     {% if request.url.path == '/upload' %}text-white font-medium{% endif %}">
+          Upload Case
+        </span>
+      </a>
+
+      <!-- My Cases — points to /dashboard until dedicated page exists -->
+      <a href="/dashboard"
+         class="nav-item flex items-center gap-3 px-3 py-2.5
+                rounded-sm transition-colors group">
+        <svg width="16" height="16" fill="none" stroke="currentColor"
+             viewBox="0 0 24 24"
+             class="text-blue-300 flex-shrink-0 group-hover:text-white
+                    transition-colors">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="1.75"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586
+                   a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19
+                   a2 2 0 01-2 2z"/>
+        </svg>
+        <span class="text-sm text-blue-200 transition-colors
+                     group-hover:text-white">
+          My Cases
+        </span>
+      </a>
+
+      <a href="/billing"
+         class="nav-item {% if request.url.path == '/billing' %}nav-item-active{% endif %}
+                flex items-center gap-3 px-3 py-2.5 rounded-sm
+                transition-colors group">
+        <svg width="16" height="16" fill="none" stroke="currentColor"
+             viewBox="0 0 24 24"
+             class="text-blue-300 flex-shrink-0 group-hover:text-white
+                    transition-colors
+                    {% if request.url.path == '/billing' %}text-white{% endif %}">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="1.75"
+                d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0
+                   00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+        </svg>
+        <span class="text-sm text-blue-200 transition-colors
+                     {% if request.url.path == '/billing' %}text-white font-medium{% endif %}">
+          Billing
+        </span>
+      </a>
+
+    </nav>
+
+    <!-- Bottom: trial bar + sign out -->
+    <div class="px-4 pb-5 space-y-3 border-t border-white
+                border-opacity-10 pt-4">
+
+      {% if current_user and current_user.subscription_status == 'trial' %}
+      <div>
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="text-[10px] font-semibold uppercase
+                       tracking-[0.08em] text-blue-300 opacity-70">
+            Trial Usage
           </span>
-          <span class="block text-[10px] font-semibold tracking-[0.12em] uppercase
-                       text-blue-300 opacity-60 mt-0.5">
-            Legal&#8209;Tech
+          <span class="text-[10px] text-blue-300 opacity-70 tabular-nums">
+            {{ current_user.trial_cases_used }}/3
           </span>
-        </a>
-      </div>
-
-      <!-- New Case CTA -->
-      <div class="px-4 pt-5 pb-3">
-        <a href="/upload"
-           class="flex items-center justify-center gap-2 w-full bg-action-blue
-                  hover:bg-blue-600 text-white text-sm font-semibold py-2 px-3
-                  rounded transition-colors">
-          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                  d="M12 4v16m8-8H4"/>
-          </svg>
-          New Case
-        </a>
-      </div>
-
-      <!-- Nav links -->
-      <nav class="flex-1 px-2 py-2 space-y-0.5">
-
-        <!-- Dashboard -->
-        <a href="/dashboard"
-           class="nav-item {% if request.url.path == '/dashboard' %}nav-item-active{% endif %}
-                  flex items-center gap-3 px-3 py-2.5 rounded-sm transition-colors group">
-          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-               class="text-blue-300 flex-shrink-0 group-hover:text-white transition-colors
-                      {% if request.url.path == '/dashboard' %}text-white{% endif %}">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"
-                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-          </svg>
-          <span class="text-sm text-blue-200 transition-colors
-                       {% if request.url.path == '/dashboard' %}text-white font-medium{% endif %}">
-            Dashboard
-          </span>
-        </a>
-
-        <!-- Upload Case -->
-        <a href="/upload"
-           class="nav-item {% if request.url.path == '/upload' %}nav-item-active{% endif %}
-                  flex items-center gap-3 px-3 py-2.5 rounded-sm transition-colors group">
-          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-               class="text-blue-300 flex-shrink-0 group-hover:text-white transition-colors
-                      {% if request.url.path == '/upload' %}text-white{% endif %}">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
-          </svg>
-          <span class="text-sm text-blue-200 transition-colors
-                       {% if request.url.path == '/upload' %}text-white font-medium{% endif %}">
-            Upload Case
-          </span>
-        </a>
-
-        <!-- My Cases — points to /dashboard until a dedicated /cases page exists -->
-        <a href="/dashboard"
-           class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-sm transition-colors group">
-          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-               class="text-blue-300 flex-shrink-0 group-hover:text-white transition-colors">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"
-                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586
-                     a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-          </svg>
-          <span class="text-sm text-blue-200 transition-colors group-hover:text-white">
-            My Cases
-          </span>
-        </a>
-
-        <!-- Billing -->
+        </div>
+        <div class="w-full bg-white bg-opacity-10 rounded-full h-1.5
+                    overflow-hidden">
+          <div class="bg-amber-400 h-1.5 rounded-full transition-all
+                      duration-500"
+               style="width: {{ ((current_user.trial_cases_used / 3) * 100) | int }}%">
+          </div>
+        </div>
         <a href="/billing"
-           class="nav-item {% if request.url.path == '/billing' %}nav-item-active{% endif %}
-                  flex items-center gap-3 px-3 py-2.5 rounded-sm transition-colors group">
-          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-               class="text-blue-300 flex-shrink-0 group-hover:text-white transition-colors
-                      {% if request.url.path == '/billing' %}text-white{% endif %}">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"
-                  d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6
-                     a3 3 0 00-3 3v8a3 3 0 003 3z"/>
-          </svg>
-          <span class="text-sm text-blue-200 transition-colors
-                       {% if request.url.path == '/billing' %}text-white font-medium{% endif %}">
-            Billing
-          </span>
+           class="block mt-2 text-[10px] text-blue-300 hover:text-white
+                  transition-colors opacity-70 hover:opacity-100">
+          Upgrade to Pro →
         </a>
-
-      </nav>
-
-      <!-- Bottom section — trial indicator + logout -->
-      <div class="px-4 pb-5 space-y-3 border-t border-white border-opacity-10 pt-4">
-
-        <!-- Trial usage bar — only shown for trial users -->
-        {% if current_user and current_user.subscription_status == 'trial' %}
-        <div>
-          <div class="flex items-center justify-between mb-1.5">
-            <span class="text-[10px] font-semibold uppercase tracking-[0.08em] text-blue-300 opacity-70">
-              Trial Usage
-            </span>
-            <span class="text-[10px] text-blue-300 opacity-70">
-              {{ current_user.trial_cases_used }}/3
-            </span>
-          </div>
-          <div class="w-full bg-white bg-opacity-10 rounded-full h-1.5 overflow-hidden">
-            <div class="bg-amber-400 h-1.5 rounded-full transition-all duration-500"
-                 style="width: {{ ((current_user.trial_cases_used / 3) * 100) | int }}%">
-            </div>
-          </div>
-          <a href="/billing"
-             class="block mt-2 text-[10px] text-blue-300 hover:text-white
-                    transition-colors opacity-70 hover:opacity-100">
-            Upgrade to Pro →
-          </a>
-        </div>
-        {% endif %}
-
-        <!-- Sign out -->
-        <form action="/auth/logout" method="post">
-          <button type="submit"
-                  class="flex items-center gap-2 w-full text-blue-300 hover:text-white
-                         text-sm transition-colors py-1 group">
-            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                 class="flex-shrink-0">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"
-                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7
-                       a3 3 0 013-3h4a3 3 0 013 3v1"/>
-            </svg>
-            Sign Out
-          </button>
-        </form>
-
-      </div>
-    </aside>
-
-    <!-- ── MAIN CONTENT AREA ── -->
-    <div class="flex-1 ml-[200px] flex flex-col min-h-screen">
-
-      <!-- Top bar -->
-      <header class="bg-white border-b border-rule-line px-8 py-4 flex items-center
-                     justify-between sticky top-0 z-20">
-        <div>
-          <h1 class="font-display text-xl font-bold text-navy leading-tight">
-            {% block page_title %}{% endblock %}
-          </h1>
-          {% block page_subtitle %}{% endblock %}
-        </div>
-        <div class="flex items-center gap-4">
-          {% block header_actions %}{% endblock %}
-          <!-- User identity -->
-          {% if current_user %}
-          <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-full bg-navy flex items-center justify-center flex-shrink-0">
-              <span class="text-white text-xs font-semibold">
-                {{ current_user.firm_name[0] | upper }}
-              </span>
-            </div>
-            <span class="text-sm text-gray-600 font-medium hidden sm:block">
-              {{ current_user.firm_name }}
-            </span>
-          </div>
-          {% endif %}
-        </div>
-      </header>
-
-      <!-- Flash messages -->
-      {% if messages %}
-      <div class="px-8 pt-5 space-y-2">
-        {% for message in messages %}
-          {% if message.type == 'success' %}
-            <div class="flex items-start gap-2 rounded border border-green-200
-                        bg-green-50 p-3 text-[#16a34a] text-sm">
-              <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1
-                  0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0
-                  001.414 0l4-4z" clip-rule="evenodd"/>
-              </svg>
-              <span>{{ message.text }}</span>
-            </div>
-          {% elif message.type == 'error' %}
-            <div class="flex items-start gap-2 rounded border border-red-200
-                        bg-red-50 p-3 text-[#dc2626] text-sm">
-              <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1
-                  0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0
-                  00-1-1z" clip-rule="evenodd"/>
-              </svg>
-              <span>{{ message.text }}</span>
-            </div>
-          {% elif message.type == 'warning' %}
-            <div class="flex items-start gap-2 rounded border border-amber-200
-                        bg-amber-50 p-3 text-[#d97706] text-sm">
-              <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486
-                  0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53
-                  0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0
-                  012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                  clip-rule="evenodd"/>
-              </svg>
-              <span>{{ message.text }}</span>
-            </div>
-          {% else %}
-            <div class="flex items-start gap-2 rounded border border-blue-200
-                        bg-blue-50 p-3 text-blue-700 text-sm">
-              <span>{{ message.text }}</span>
-            </div>
-          {% endif %}
-        {% endfor %}
       </div>
       {% endif %}
 
-      <!-- Page content -->
-      <main class="flex-1 px-8 py-8">
-        {% block content %}{% endblock %}
-      </main>
-
-      <!-- Footer -->
-      <footer class="px-8 py-4 border-t border-rule-line">
-        <div class="flex items-center justify-between">
-          <span class="text-xs text-gray-400">
-            &copy; 2025 ChartLens &mdash; Built for personal injury attorneys
-          </span>
-          <span class="text-xs text-gray-400">
-            Data encrypted at rest &middot; 256-bit TLS
-          </span>
-        </div>
-      </footer>
+      <form action="/auth/logout" method="post">
+        <button type="submit"
+                class="flex items-center gap-2 w-full text-blue-300
+                       hover:text-white text-sm transition-colors
+                       py-1 group">
+          <svg width="14" height="14" fill="none" stroke="currentColor"
+               viewBox="0 0 24 24" class="flex-shrink-0">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="1.75"
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6
+                     a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+          </svg>
+          Sign Out
+        </button>
+      </form>
 
     </div>
+  </aside>
+
+  <!-- ══════════════════════════════════════════
+       MAIN CONTENT AREA
+       ══════════════════════════════════════════ -->
+  <div class="flex-1 md:ml-[200px] flex flex-col min-h-screen">
+
+    <!-- Top bar -->
+    <header class="bg-white border-b border-rule-line px-4 md:px-8
+                   py-4 flex items-center justify-between
+                   sticky top-0 z-20">
+      <div class="min-w-0 flex-1">
+        <h1 class="font-display text-lg md:text-xl font-bold text-navy
+                   leading-tight truncate">
+          {% block page_title %}{% endblock %}
+        </h1>
+        <div class="hidden sm:block">
+          {% block page_subtitle %}{% endblock %}
+        </div>
+      </div>
+      <div class="flex items-center gap-3 ml-4 flex-shrink-0">
+        {% block header_actions %}{% endblock %}
+        {% if current_user %}
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-navy flex items-center
+                      justify-center flex-shrink-0">
+            <span class="text-white text-xs font-semibold">
+              {{ current_user.firm_name[0] | upper }}
+            </span>
+          </div>
+          <span class="text-sm text-gray-600 font-medium
+                       hidden lg:block">
+            {{ current_user.firm_name }}
+          </span>
+        </div>
+        {% endif %}
+      </div>
+    </header>
+
+    <!-- Flash messages -->
+    {% if messages %}
+    <div class="px-4 md:px-8 pt-5 space-y-2">
+      {% for message in messages %}
+        {% if message.type == 'success' %}
+          <div class="flex items-start gap-2 rounded border
+                      border-green-200 bg-green-50 p-3
+                      text-[#16a34a] text-sm">
+            <svg class="w-4 h-4 mt-0.5 flex-shrink-0"
+                 fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1
+                       1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0
+                       00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd"/>
+            </svg>
+            <span>{{ message.text }}</span>
+          </div>
+        {% elif message.type == 'error' %}
+          <div class="flex items-start gap-2 rounded border
+                      border-red-200 bg-red-50 p-3
+                      text-[#dc2626] text-sm">
+            <svg class="w-4 h-4 mt-0.5 flex-shrink-0"
+                 fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0
+                       11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0
+                       102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+            </svg>
+            <span>{{ message.text }}</span>
+          </div>
+        {% elif message.type == 'warning' %}
+          <div class="flex items-start gap-2 rounded border
+                      border-amber-200 bg-amber-50 p-3
+                      text-[#d97706] text-sm">
+            <svg class="w-4 h-4 mt-0.5 flex-shrink-0"
+                 fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486
+                       0l5.58 9.92c.75 1.334-.213 2.98-1.742
+                       2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58
+                       -9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1
+                       1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                    clip-rule="evenodd"/>
+            </svg>
+            <span>{{ message.text }}</span>
+          </div>
+        {% else %}
+          <div class="flex items-start gap-2 rounded border
+                      border-blue-200 bg-blue-50 p-3
+                      text-blue-700 text-sm">
+            <span>{{ message.text }}</span>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Page content -->
+    <main class="flex-1 px-4 md:px-8 py-6 md:py-8 mobile-content-pad">
+      {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer — hidden on mobile to save space -->
+    <footer class="hidden md:block px-8 py-4 border-t border-rule-line">
+      <div class="flex items-center justify-between">
+        <span class="text-xs text-gray-400">
+          &copy; 2025 ChartLens &mdash; Built for personal injury attorneys
+        </span>
+        <span class="text-xs text-gray-400">
+          Data encrypted at rest &middot; 256-bit TLS
+        </span>
+      </div>
+    </footer>
+
   </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     BOTTOM NAV — visible on mobile only
+     ══════════════════════════════════════════ -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 z-40
+            bg-white border-t border-rule-line
+            flex items-stretch h-16">
+
+  <!-- Dashboard -->
+  <a href="/dashboard"
+     class="flex-1 flex flex-col items-center justify-center gap-0.5
+            {% if request.url.path == '/dashboard' %}bottom-nav-active{% endif %}
+            text-gray-400 hover:text-navy transition-colors py-2">
+    <svg width="20" height="20" fill="none" stroke="currentColor"
+         viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            stroke-width="1.75"
+            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2
+               2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0
+               011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+    </svg>
+    <span class="text-[10px] font-medium">Home</span>
+  </a>
+
+  <!-- Upload -->
+  <a href="/upload"
+     class="flex-1 flex flex-col items-center justify-center gap-0.5
+            {% if request.url.path == '/upload' %}bottom-nav-active{% endif %}
+            text-gray-400 hover:text-navy transition-colors py-2">
+    <svg width="20" height="20" fill="none" stroke="currentColor"
+         viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            stroke-width="1.75"
+            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0
+               0L8 8m4-4v12"/>
+    </svg>
+    <span class="text-[10px] font-medium">Upload</span>
+  </a>
+
+  <!-- New Case — center prominent CTA -->
+  <a href="/upload"
+     class="flex-1 flex flex-col items-center justify-center gap-0.5
+            py-2 -mt-4">
+    <div class="w-12 h-12 rounded-full bg-action-blue flex items-center
+                justify-center shadow-lg">
+      <svg width="20" height="20" fill="none" stroke="currentColor"
+           viewBox="0 0 24 24" class="text-white">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              stroke-width="2.5" d="M12 4v16m8-8H4"/>
+      </svg>
+    </div>
+    <span class="text-[10px] font-medium text-gray-400">New Case</span>
+  </a>
+
+  <!-- Cases -->
+  <a href="/dashboard"
+     class="flex-1 flex flex-col items-center justify-center gap-0.5
+            text-gray-400 hover:text-navy transition-colors py-2">
+    <svg width="20" height="20" fill="none" stroke="currentColor"
+         viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            stroke-width="1.75"
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586
+               a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19
+               a2 2 0 01-2 2z"/>
+    </svg>
+    <span class="text-[10px] font-medium">Cases</span>
+  </a>
+
+  <!-- Billing -->
+  <a href="/billing"
+     class="flex-1 flex flex-col items-center justify-center gap-0.5
+            {% if request.url.path == '/billing' %}bottom-nav-active{% endif %}
+            text-gray-400 hover:text-navy transition-colors py-2">
+    <svg width="20" height="20" fill="none" stroke="currentColor"
+         viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            stroke-width="1.75"
+            d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0
+               00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+    </svg>
+    <span class="text-[10px] font-medium">Billing</span>
+  </a>
+
+</nav>
 
 </body>
 </html>
