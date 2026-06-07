@@ -140,9 +140,7 @@ async def health_check() -> JSONResponse:
 
 @app.get("/", include_in_schema=False)
 async def landing_page(request: Request):
-    from core.security import _decode_token
-    from config import get_settings
-    COOKIE_NAME = "access_token"
+    from routes.auth import COOKIE_NAME, _decode_token
     token = request.cookies.get(COOKIE_NAME)
     if token and _decode_token(token):
         return RedirectResponse(url="/dashboard", status_code=302)
