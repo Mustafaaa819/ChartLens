@@ -183,20 +183,6 @@ async def run_analysis_pipeline(case_id: uuid.UUID, pdf_path: str) -> None:
 
 
 # ---------------------------------------------------------------------------
-# GET /  — smart root redirect
-# ---------------------------------------------------------------------------
-
-
-@router.get("/", include_in_schema=False)
-async def root_redirect(request: Request) -> RedirectResponse:
-    """Redirect to /dashboard for authenticated users, /login otherwise."""
-    token: str | None = request.cookies.get(COOKIE_NAME)
-    if token and _decode_token(token):
-        return RedirectResponse(url="/dashboard", status_code=302)
-    return RedirectResponse(url="/login", status_code=302)
-
-
-# ---------------------------------------------------------------------------
 # GET /dashboard
 # ---------------------------------------------------------------------------
 

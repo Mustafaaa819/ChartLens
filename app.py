@@ -6,7 +6,7 @@ from pathlib import Path
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from slowapi import _rate_limit_exceeded_handler
@@ -140,6 +140,12 @@ async def health_check() -> JSONResponse:
 
 @app.get("/", include_in_schema=False)
 async def landing_page(request: Request):
+    from core.security import _decode_token
+    from config import get_settings
+    COOKIE_NAME = "access_token"
+    token = request.cookies.get(COOKIE_NAME)
+    if token and _decode_token(token):
+        return RedirectResponse(url="/dashboard", status_code=302)
     return templates.TemplateResponse("landing.html", {"request": request})
 
 
