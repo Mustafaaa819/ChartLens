@@ -43,10 +43,6 @@
       margin: 1px 2px;
       white-space: nowrap;
     }
-    .pages-cell {
-      white-space: nowrap;
-      vertical-align: middle;
-    }
     .inc-pages { margin-top: 6px; }
     .inc-pages-label {
       font-size: 12px;
@@ -312,12 +308,8 @@
               Paid
             </th>
             <th class="px-4 py-4 text-center text-[10px] font-semibold uppercase
-                       tracking-[0.08em] text-gray-400">
-              Confidence
-            </th>
-            <th class="px-4 py-4 text-left text-[10px] font-semibold uppercase
                        tracking-[0.08em] text-gray-400 whitespace-nowrap">
-              Page(s)
+              Confidence · Page
             </th>
           </tr>
         </thead>
@@ -376,39 +368,37 @@
                 {% set conf = (event.confidence or "low") | lower %}
                 {% if conf == "high" %}
                   <span class="inline-flex items-center px-2 py-0.5 rounded
-                               text-xs font-medium bg-green-100 text-[#16a34a]">
+                               text-xs font-medium bg-green-100 text-[#16a34a] mb-1">
                     High
                   </span>
                 {% elif conf == "medium" %}
                   <span class="inline-flex items-center px-2 py-0.5 rounded
-                               text-xs font-medium bg-amber-100 text-[#d97706]">
-                    Medium
+                               text-xs font-medium bg-amber-100 text-[#d97706] mb-1">
+                    Med
                   </span>
                 {% else %}
                   <span class="inline-flex items-center px-2 py-0.5 rounded
-                               text-xs font-medium bg-red-100 text-[#dc2626]">
+                               text-xs font-medium bg-red-100 text-[#dc2626] mb-1">
                     Low
                   </span>
                 {% endif %}
-              </td>
-
-              {% set pages = event.page_numbers if event.page_numbers else [] %}
-              {% if pages %}
-                <td class="px-4 py-3 align-top pages-cell">
+                <br>
+                {% set pages = event.page_numbers if event.page_numbers else [] %}
+                {% if pages %}
                   {% for pg in pages %}
                     <span class="page-badge">p.{{ pg }}</span>
                   {% endfor %}
-                </td>
-              {% else %}
-                <td class="px-4 py-3 align-top pages-cell text-gray-400 text-xs">—</td>
-              {% endif %}
+                {% else %}
+                  <span class="text-gray-300 text-xs">—</span>
+                {% endif %}
+              </td>
 
             </tr>
             {% endfor %}
 
           {% else %}
             <tr>
-              <td colspan="9"
+              <td colspan="8"
                   class="px-4 py-10 text-center text-gray-400 text-sm">
                 No dated events found.
               </td>
