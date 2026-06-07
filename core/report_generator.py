@@ -20,8 +20,8 @@ from openpyxl.utils import get_column_letter
 
 logger = logging.getLogger(__name__)
 
-# Date, Provider, Visit Type, Diagnosis, Billed, Confidence — in points
-_CHRON_COL_WIDTHS = [65, 130, 70, 150, 55, 50]
+# Date, Provider, Visit Type, Diagnosis, Billed, Conf., Pages — in points (sum = 504)
+_CHRON_COL_WIDTHS = [58, 110, 65, 130, 50, 40, 51]
 
 
 def _make_styles() -> dict:
@@ -90,11 +90,13 @@ def _pdf_chronology_flowables(chronology: dict, styles: dict) -> list:
         flowables.append(Paragraph("No dated events found in chronology.", styles["normal"]))
         return flowables
 
-    headers = ["Date", "Provider", "Visit Type", "Diagnosis", "Billed", "Confidence"]
+    headers = ["Date", "Provider", "Visit Type", "Diagnosis", "Billed", "Conf.", "Pages"]
     table_data: list = [headers]
     for event in chron_list:
         diag_str = ", ".join(event.get("diagnosis") or []) or "-"
         billed = float(event.get("billed_amount") or 0.0)
+        page_nums = event.get("page_numbers") or []
+        pages_str = ", ".join(str(p) for p in page_nums) if page_nums else "-"
         table_data.append([
             event.get("date") or "-",
             Paragraph(event.get("provider_name") or "-", styles["small"]),
@@ -102,6 +104,7 @@ def _pdf_chronology_flowables(chronology: dict, styles: dict) -> list:
             Paragraph(diag_str, styles["small"]),
             f"${billed:,.2f}",
             (event.get("confidence") or "-").capitalize(),
+            pages_str,
         ])
 
     tbl = Table(table_data, colWidths=_CHRON_COL_WIDTHS, repeatRows=1)
@@ -132,9 +135,17 @@ def _pdf_chronology_flowables(chronology: dict, styles: dict) -> list:
 
 def _pdf_inconsistencies_flowables(inconsistencies: dict, styles: dict) -> list:
     """Return story elements for the inconsistencies section (forced to a new page)."""
+    note_style = ParagraphStyle(
+        "ReportSmallItalic", parent=styles["small"], fontName="Helvetica-Oblique"
+    )
     flowables: list = [
         PageBreak(),
         Paragraph("Inconsistency Flags", styles["h2"]),
+        Paragraph(
+            "Page numbers reference the uploaded PDF. Open the original file to "
+            "verify each flagged item at the cited page.",
+            note_style,
+        ),
         Spacer(1, 0.1 * inch),
     ]
     incons_list: list[dict] = inconsistencies.get("inconsistencies") or []
@@ -151,7 +162,10 @@ def _pdf_inconsistencies_flowables(inconsistencies: dict, styles: dict) -> list:
         rec = item.get("recommendation") or "No recommendation."
         date1 = item.get("date_1") or "-"
         date2 = item.get("date_2") or "-"
-        pages_str = ", ".join(str(p) for p in (item.get("page_references") or [])) or "-"
+        pages_str = (
+            ", ".join(str(p) for p in (item.get("page_references") or []))
+            or "see source records"
+        )
         label = _sev_labels.get(severity, severity.upper())
         flowables.append(KeepTogether([
             Paragraph(f"{idx}. [{label}] {inc_type}", styles["label"]),

@@ -30,6 +30,34 @@
   {% endif %}
 {% endblock %}
 
+{% block head %}
+  <style>
+    .page-badge {
+      display: inline-block;
+      background: #1e3a5f;
+      color: #f8f6f1;
+      font-size: 11px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      padding: 2px 6px;
+      border-radius: 3px;
+      margin: 1px 2px;
+      white-space: nowrap;
+    }
+    .pages-cell {
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+    .inc-pages { margin-top: 6px; }
+    .inc-pages-label {
+      font-size: 12px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      color: #1e3a5f;
+      font-weight: 600;
+      margin-right: 4px;
+    }
+  </style>
+{% endblock %}
+
 {% block header_actions %}
   <a href="/dashboard"
      class="text-sm text-gray-400 hover:text-navy transition-colors">
@@ -364,11 +392,16 @@
                 {% endif %}
               </td>
 
-              <td class="px-4 py-3 text-gray-400 text-xs align-top
-                         whitespace-nowrap">
-                {{ event.page_numbers | join(", ")
-                   if event.page_numbers else "—" }}
-              </td>
+              {% set pages = event.page_numbers if event.page_numbers else [] %}
+              {% if pages %}
+                <td class="px-4 py-3 align-top pages-cell">
+                  {% for pg in pages %}
+                    <span class="page-badge">p.{{ pg }}</span>
+                  {% endfor %}
+                </td>
+              {% else %}
+                <td class="px-4 py-3 align-top pages-cell text-gray-400 text-xs">—</td>
+              {% endif %}
 
             </tr>
             {% endfor %}
@@ -461,10 +494,21 @@
                       Dates: {{ item.date_1 or "—" }} / {{ item.date_2 or "—" }}
                     </span>
                   {% endif %}
-                  {% if item.page_references %}
-                    <span>Pages: {{ item.page_references | join(", ") }}</span>
-                  {% endif %}
                 </div>
+
+                {% set refs = item.page_references if item.page_references else [] %}
+                {% if refs %}
+                  <div class="inc-pages">
+                    <span class="inc-pages-label">Source pages:</span>
+                    {% for pg in refs %}
+                      <span class="page-badge">p.{{ pg }}</span>
+                    {% endfor %}
+                  </div>
+                {% else %}
+                  <div class="inc-pages text-muted" style="font-size:12px;">
+                    Page references: see source records
+                  </div>
+                {% endif %}
 
                 {% if item.recommendation %}
                   <p class="text-xs text-gray-500 mt-2 italic">
