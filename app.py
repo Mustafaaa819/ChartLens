@@ -4,9 +4,9 @@ import logging.config
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from slowapi import _rate_limit_exceeded_handler
@@ -139,6 +139,10 @@ async def health_check() -> JSONResponse:
 
 
 @app.get("/", include_in_schema=False)
-async def root() -> RedirectResponse:
-    """Redirect root to the dashboard (or login if not authenticated)."""
-    return RedirectResponse(url="/dashboard", status_code=302)
+async def landing_page(request: Request):
+    return templates.TemplateResponse("landing.html", {"request": request})
+
+
+@app.get("/register-page", include_in_schema=False)
+async def register_page(request: Request):
+    return templates.TemplateResponse("register_page.html", {"request": request})
