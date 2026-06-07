@@ -144,7 +144,9 @@ async def landing_page(request: Request):
     token = request.cookies.get(COOKIE_NAME)
     if token and _decode_token(token):
         return RedirectResponse(url="/dashboard", status_code=302)
-    return templates.TemplateResponse("landing.html", {"request": request})
+    from fastapi.responses import FileResponse
+    from pathlib import Path
+    return FileResponse(Path("templates/landing.html"), media_type="text/html")
 
 
 @app.get("/register-page", include_in_schema=False)
