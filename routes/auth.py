@@ -150,11 +150,10 @@ def get_current_user(
 
 @router.get("/login")
 async def login_page(request: Request):
-    """Render the sign-in page."""
-    return templates.TemplateResponse(
-        "auth/login.html",
-        {"request": request, "current_user": None},
-    )
+    """Render the new Counsel Stationery sign-in page."""
+    from fastapi.responses import FileResponse
+    from pathlib import Path
+    return FileResponse(Path("templates/login_new.html"), media_type="text/html")
 
 
 # ---------------------------------------------------------------------------

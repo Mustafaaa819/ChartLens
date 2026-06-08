@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign in — ChartLens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f2ebdc;
+    --bg-darker: #ede5d4;
+    --navy: #1a2744;
+    --copper: #8B5E3C;
+    --text: #3a3228;
+    --muted: #7a6e62;
+    --card: #ffffff;
+    --border: #d4c9b0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    line-height: 1.6;
+    color: var(--text);
+  }
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 500;
+  }
+  a { color: inherit; text-decoration: none; }
+  .small-caps {
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .rule { height: 1px; flex: 1; }
+
+  /* ---------- LAYOUT ---------- */
+  .split {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ---------- LEFT PANEL ---------- */
+  .panel-left {
+    width: 40%;
+    background: linear-gradient(135deg, #1a2744 0%, #2a2240 100%);
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 44px 56px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+  }
+  .brand-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
+    background: rgba(255,255,255,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .brand-icon svg { width: 18px; height: 18px; stroke: #ffffff; }
+  .brand-chart { color: #ffffff; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; }
+  .brand-lens { color: #d8b08f; font-style: italic; }
+
+  .panel-mid { margin: auto 0; padding: 64px 0; }
+  .panel-label {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 30px;
+  }
+  .panel-label .small-caps { color: #b9c2d6; }
+  .panel-label .rule { background: rgba(255,255,255,0.18); max-width: 70px; }
+  .panel-mid h2 {
+    color: #ffffff;
+    font-size: 36px;
+    line-height: 1.32;
+  }
+  .panel-mid h2 .accent { font-style: italic; color: #d8b08f; }
+  .panel-mid p {
+    margin-top: 22px;
+    max-width: 460px;
+    color: rgba(255,255,255,0.72);
+    font-size: 16px;
+  }
+  .panel-checklist {
+    list-style: none;
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .panel-checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 15px;
+    color: #ffffff;
+  }
+  .panel-checklist svg { flex-shrink: 0; margin-top: 3px; width: 18px; height: 18px; stroke: #d8b08f; }
+
+  /* ---------- RIGHT PANEL ---------- */
+  .panel-right {
+    width: 60%;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    padding: 44px 56px;
+  }
+  .back-link {
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .back-link:hover { color: var(--navy); }
+
+  .form-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .form-inner {
+    width: 100%;
+    max-width: 440px;
+    padding: 40px 0;
+  }
+  .form-label {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 22px;
+  }
+  .form-label .small-caps { color: var(--copper); }
+  .form-label .rule { background: #dc2626; max-width: 60px; }
+  .form-inner h2 {
+    color: var(--navy);
+    font-size: 32px;
+  }
+  .form-sub {
+    margin-top: 12px;
+    font-size: 15px;
+    color: var(--muted);
+  }
+  .form-sub a { color: var(--copper); font-weight: 600; }
+  .form-sub a:hover { text-decoration: underline; }
+
+  form { margin-top: 32px; display: flex; flex-direction: column; gap: 18px; }
+  .field { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .field label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .field input {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+  }
+  .field input:focus {
+    outline: none;
+    border-color: var(--navy);
+  }
+  .field input::placeholder { color: var(--muted); }
+
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text);
+  }
+  .checkbox-row input { flex-shrink: 0; }
+
+  .submit-btn {
+    width: 100%;
+    background: var(--navy);
+    color: #ffffff;
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+  }
+  .submit-btn:hover { opacity: 0.9; }
+
+  @media (max-width: 900px) {
+    .split { flex-direction: column; }
+    .panel-left, .panel-right { width: 100%; }
+    .panel-left { padding: 36px; }
+    .panel-right { padding: 36px; }
+  }
+</style>
+</head>
+<body>
+<div class="split">
+
+  <!-- ---------- LEFT PANEL ---------- -->
+  <aside class="panel-left">
+    <a href="/" class="brand">
+      <span class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </span>
+      <span><span class="brand-chart">Chart</span><span class="brand-lens">Lens</span></span>
+    </a>
+
+    <div class="panel-mid">
+      <div class="panel-label">
+        <span class="rule"></span>
+        <span class="small-caps">Welcome back</span>
+        <span class="rule"></span>
+      </div>
+      <h2>Your case files are waiting.</h2>
+      <p>Sign in to access your medical chronologies, download reports, and pick up where you left off.</p>
+      <ul class="panel-checklist">
+        <li><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> All your cases, exactly as you left them</li>
+        <li><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Download PDF and Excel reports any time</li>
+        <li><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Your records are encrypted at rest and in transit</li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- ---------- RIGHT PANEL ---------- -->
+  <main class="panel-right">
+    <a href="/" class="back-link">&larr; Back to home</a>
+
+    <div class="form-wrap">
+      <div class="form-inner">
+        <div class="form-label">
+          <span class="small-caps">Sign in</span>
+          <span class="rule"></span>
+        </div>
+        <h2>Sign in to ChartLens</h2>
+        <p class="form-sub">Don't have an account? <a href="/register-page">Start free</a></p>
+
+        <form action="/auth/login" method="POST">
+          <div class="field">
+            <label for="email">Work email</label>
+            <input type="email" id="email" name="email" placeholder="you@yourfirm.com" required>
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Your password" required>
+          </div>
+
+          <label class="checkbox-row">
+            <input type="checkbox" name="remember_me">
+            <span>Remember me</span>
+          </label>
+
+          <button type="submit" class="submit-btn">Sign in &rarr;</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+</div>
+</body>
+</html>
