@@ -164,11 +164,10 @@ async def login_page(request: Request):
 
 @router.get("/register")
 async def register_page(request: Request):
-    """Render the account registration page."""
-    return templates.TemplateResponse(
-        "auth/register.html",
-        {"request": request, "current_user": None},
-    )
+    """Render the new Counsel Stationery register page."""
+    from fastapi.responses import FileResponse
+    from pathlib import Path
+    return FileResponse(Path("templates/register_new.html"), media_type="text/html")
 
 
 # ---------------------------------------------------------------------------
