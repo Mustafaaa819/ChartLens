@@ -151,4 +151,6 @@ async def landing_page(request: Request):
 
 @app.get("/register-page", include_in_schema=False)
 async def register_page(request: Request):
-    return templates.TemplateResponse("register_page.html", {"request": request})
+    from fastapi.responses import FileResponse
+    from pathlib import Path
+    return FileResponse(Path("templates/register_new.html"), media_type="text/html")
