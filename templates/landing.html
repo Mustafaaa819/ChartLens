@@ -461,6 +461,47 @@
     opacity: 1;
     transform: translateY(0);
   }
+
+  /* ---------- CARD HOVER LIFT ---------- */
+  .cap-card {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .cap-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 40px rgba(26, 39, 68, 0.10);
+  }
+
+  .steps > div {
+    transition: transform 0.25s ease;
+  }
+  .steps > div:hover {
+    transform: translateY(-4px);
+  }
+
+  /* ---------- ACTIVE NAV LINK ---------- */
+  .nav-links a {
+    position: relative;
+    padding-bottom: 4px;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    background: var(--copper);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .nav-links a.active::after {
+    transform: scaleX(1);
+  }
+  .nav-links a.active {
+    color: var(--navy);
+    font-weight: 500;
+  }
 </style>
 </head>
 <body>
@@ -815,6 +856,30 @@
   };
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
+
+  // Active nav link on scroll
+  const sections = [
+    { id: 'features', link: document.querySelector('.nav-links a[href="#features"]') },
+    { id: 'privacy',  link: document.querySelector('.nav-links a[href="#privacy"]') },
+    { id: 'start',    link: document.querySelector('.nav-links a[href="#start"]') },
+  ];
+
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const match = sections.find(s => s.id === entry.target.id);
+      if (match && match.link) {
+        if (entry.isIntersecting) {
+          sections.forEach(s => s.link && s.link.classList.remove('active'));
+          match.link.classList.add('active');
+        }
+      }
+    });
+  }, { threshold: 0.3 });
+
+  sections.forEach(s => {
+    const el = document.getElementById(s.id);
+    if (el) navObserver.observe(el);
+  });
 </script>
 
 </body>
