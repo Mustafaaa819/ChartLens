@@ -427,6 +427,18 @@
     .footer-grid { grid-template-columns: 1fr 1fr; }
     .cta-card { padding: 48px 28px; }
   }
+
+  /* ---------- HERO WORD REVEAL ---------- */
+  .hero-headline .word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .hero-headline .word.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 </style>
 </head>
 <body>
@@ -459,7 +471,7 @@
       <span class="small-caps">Medical-record intelligence for litigation</span>
       <span class="rule"></span>
     </div>
-    <h1>
+    <h1 class="hero-headline">
       Thousands of pages, read in full —
       <span class="accent">in one defensible timeline.</span>
     </h1>
@@ -720,6 +732,22 @@
     requestAnimationFrame(raf);
   }
   requestAnimationFrame(raf);
+
+  // Hero headline word reveal
+  const heroHeadline = document.querySelector('.hero-headline');
+  if (heroHeadline) {
+    const originalHTML = heroHeadline.innerHTML;
+    const wrapped = originalHTML.replace(/(\S+)/g,
+      '<span class="word">$1</span>');
+    heroHeadline.innerHTML = wrapped;
+
+    const words = heroHeadline.querySelectorAll('.word');
+    words.forEach((word, i) => {
+      setTimeout(() => {
+        word.classList.add('visible');
+      }, 120 + i * 80);
+    });
+  }
 </script>
 
 </body>
