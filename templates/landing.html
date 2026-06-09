@@ -47,8 +47,15 @@
     position: sticky;
     top: 0;
     z-index: 100;
-    background: var(--bg);
+    background: transparent;
     border-bottom: 1px solid var(--border);
+    transition: background 0.4s ease, box-shadow 0.4s ease;
+  }
+  nav.scrolled {
+    background: rgba(242, 235, 220, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 1px 0 rgba(26, 39, 68, 0.08);
   }
   nav .wrap {
     display: flex;
@@ -796,6 +803,18 @@
   document.querySelectorAll('.fade-up').forEach(el => {
     fadeObserver.observe(el);
   });
+
+  // Sticky frosted navbar
+  const nav = document.querySelector('nav');
+  const onScroll = () => {
+    if (window.scrollY > 40) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 </script>
 
 </body>
