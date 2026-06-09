@@ -428,6 +428,21 @@
     .cta-card { padding: 48px 28px; }
   }
 
+  /* ---------- SCROLL FADE-UP ---------- */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(36px);
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .fade-up.delay-1 { transition-delay: 0.1s; }
+  .fade-up.delay-2 { transition-delay: 0.2s; }
+  .fade-up.delay-3 { transition-delay: 0.3s; }
+
   /* ---------- HERO WORD REVEAL ---------- */
   .hero-headline .word {
     display: inline-block;
@@ -537,16 +552,16 @@
   <div class="wrap">
     <div class="section-head">
       <div class="section-label">
-        <span class="small-caps">01&nbsp;&nbsp;How it works</span>
+        <span class="small-caps fade-up">01&nbsp;&nbsp;How it works</span>
         <span class="rule"></span>
       </div>
-      <h2>Three steps from a banker's box to a working timeline.</h2>
+      <h2 class="fade-up">Three steps from a banker's box to a working timeline.</h2>
       <p>Drop in the record exactly as you received it. ChartLens does the reading, the ordering,
         and the cross-checking — and shows its source for everything.</p>
     </div>
 
     <div class="steps">
-      <div>
+      <div class="fade-up delay-1">
         <div class="step-num">STEP 01</div>
         <div class="step-icon">
           <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V6"></path><path d="M5 12l7-7 7 7"></path><path d="M5 19h14"></path></svg>
@@ -554,7 +569,7 @@
         <h3>Upload the whole file</h3>
         <p>PDFs, scans, handwritten notes, EHR exports — thousands of pages at once. No tagging, no pre-sorting.</p>
       </div>
-      <div>
+      <div class="fade-up delay-2">
         <div class="step-num">STEP 02</div>
         <div class="step-icon">
           <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
@@ -562,7 +577,7 @@
         <h3>Get a date-ordered chronology</h3>
         <p>Every encounter on a single timeline: date, provider, facility, and treatment — each line annotated and linked to its source page.</p>
       </div>
-      <div>
+      <div class="fade-up delay-3">
         <div class="step-num">STEP 03</div>
         <div class="step-icon">
           <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
@@ -579,8 +594,8 @@
 
     <div class="cap-row">
       <div class="cap-text">
-        <span class="small-caps">Source-linked, always</span>
-        <h2>Every line traces to the page it came from.</h2>
+        <span class="small-caps fade-up">Source-linked, always</span>
+        <h2 class="fade-up">Every line traces to the page it came from.</h2>
         <p>A chronology you can't verify is a liability. ChartLens quotes the record verbatim and
           links each entry to the exact page — so a partner, an expert, or opposing counsel can
           check the source in one click.</p>
@@ -590,7 +605,7 @@
           <li><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Bates numbers preserved end to end</li>
         </ul>
       </div>
-      <div class="cap-card">
+      <div class="cap-card fade-up">
         <span class="small-caps">Pages read</span>
         <div class="stat-block">
           <span class="stat-num">1,284</span>
@@ -601,7 +616,7 @@
     </div>
 
     <div class="cap-row reverse">
-      <div class="cap-card">
+      <div class="cap-card fade-up">
         <span class="small-caps">Flags raised · 7 open</span>
         <div class="flag-list">
           <div class="flag-item">Pre-existing condition <span class="sev sev-high">HIGH</span></div>
@@ -611,8 +626,8 @@
         </div>
       </div>
       <div class="cap-text">
-        <span class="small-caps">Inconsistency detection</span>
-        <h2>The contradictions that change cases, surfaced for you.</h2>
+        <span class="small-caps fade-up">Inconsistency detection</span>
+        <h2 class="fade-up">The contradictions that change cases, surfaced for you.</h2>
         <p>Conflicting accounts of the same event. Treatment dated before the injury. A gap where
           records should be. ChartLens reads across the whole file at once and raises what a
           linear read would bury on page 511.</p>
@@ -626,8 +641,8 @@
 
     <div class="cap-row">
       <div class="cap-text">
-        <span class="small-caps">Provider &amp; facility index</span>
-        <h2>Who treated whom, when, and where — at a glance.</h2>
+        <span class="small-caps fade-up">Provider &amp; facility index</span>
+        <h2 class="fade-up">Who treated whom, when, and where — at a glance.</h2>
         <p>Every provider, facility, and encounter type, indexed and counted. Filter the
           chronology to a single treater, or pull the full roster for your damages model and
           deposition prep.</p>
@@ -636,7 +651,7 @@
           <li><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Export to Word or PDF, formatted for the file</li>
         </ul>
       </div>
-      <div class="cap-card">
+      <div class="cap-card fade-up">
         <span class="small-caps">Provider index · 14 treaters</span>
         <div class="index-list">
           <div class="index-item"><span class="index-name">Mercy General</span><span class="index-meta">Hospital · 31 enc.</span></div>
@@ -652,13 +667,13 @@
 
 <section id="start" class="cta-section">
   <div class="wrap">
-    <div class="cta-card">
+    <div class="cta-card fade-up">
       <div class="cta-label">
         <span class="rule"></span>
-        <span class="small-caps">Start free</span>
+        <span class="small-caps fade-up">Start free</span>
         <span class="rule"></span>
       </div>
-      <h2>
+      <h2 class="fade-up">
         Read your first file free —
         <span class="accent">chronology in under an hour.</span>
       </h2>
@@ -767,6 +782,20 @@
       }, 120 + i * 80);
     });
   }
+
+  // Scroll-triggered fade-up
+  const fadeObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        fadeObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.fade-up').forEach(el => {
+    fadeObserver.observe(el);
+  });
 </script>
 
 </body>
