@@ -733,16 +733,35 @@
   }
   requestAnimationFrame(raf);
 
-  // Hero headline word reveal
+  // Hero headline word reveal (text-node safe)
   const heroHeadline = document.querySelector('.hero-headline');
   if (heroHeadline) {
-    const originalHTML = heroHeadline.innerHTML;
-    const wrapped = originalHTML.replace(/(\S+)/g,
-      '<span class="word">$1</span>');
-    heroHeadline.innerHTML = wrapped;
+    const allWords = [];
 
-    const words = heroHeadline.querySelectorAll('.word');
-    words.forEach((word, i) => {
+    function wrapTextNodes(node) {
+      if (node.nodeType === 3) {
+        const words = node.textContent.split(/(\s+)/);
+        const frag = document.createDocumentFragment();
+        words.forEach(part => {
+          if (part.trim().length > 0) {
+            const span = document.createElement('span');
+            span.className = 'word';
+            span.textContent = part;
+            frag.appendChild(span);
+            allWords.push(span);
+          } else if (part.length > 0) {
+            frag.appendChild(document.createTextNode(part));
+          }
+        });
+        node.parentNode.replaceChild(frag, node);
+      } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT') {
+        Array.from(node.childNodes).forEach(wrapTextNodes);
+      }
+    }
+
+    wrapTextNodes(heroHeadline);
+
+    allWords.forEach((word, i) => {
       setTimeout(() => {
         word.classList.add('visible');
       }, 120 + i * 80);
