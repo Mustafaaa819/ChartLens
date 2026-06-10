@@ -80,6 +80,12 @@
     justify-content: center;
   }
   .brand-icon svg { width: 18px; height: 18px; stroke: var(--bg); }
+  .brand-logo-img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    display: block;
+  }
   .brand-chart { color: var(--navy); font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; }
   .brand-lens { color: var(--copper); font-style: italic; margin-left: 1px; }
   .nav-links {
@@ -595,7 +601,7 @@
   <div class="wrap">
     <a href="/" class="brand">
       <span class="brand-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <img src="/static/images/logo.png" alt="ChartLens logo" class="brand-logo-img"/>
       </span>
       <span><span class="brand-chart">Chart</span><span class="brand-lens">Lens</span></span>
     </a>
@@ -897,7 +903,7 @@
       <div class="footer-brand">
         <a href="/" class="brand">
           <span class="brand-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <img src="/static/images/logo.png" alt="ChartLens logo" class="brand-logo-img"/>
           </span>
           <span><span class="brand-chart">Chart</span><span class="brand-lens">Lens</span></span>
         </a>
