@@ -568,7 +568,7 @@
     transform: translateY(-50%);
     width: 520px;
     height: 520px;
-    opacity: 0.08;
+    opacity: 0.07;
     pointer-events: none;
     user-select: none;
   }
@@ -607,38 +607,37 @@
 
 <section class="hero">
   <div class="hero-watermark" aria-hidden="true">
-    <svg viewBox="0 0 200 200" fill="none"
+    <svg viewBox="0 0 200 220"
       xmlns="http://www.w3.org/2000/svg">
-      <!-- Base/stand -->
-      <rect x="97" y="40" width="6" height="130"
+      <!-- Vertical pole -->
+      <rect x="96" y="30" width="8" height="140"
         fill="#1a2744"/>
       <!-- Horizontal beam -->
-      <rect x="40" y="43" width="120" height="5"
+      <rect x="30" y="34" width="140" height="8"
+        rx="4" fill="#1a2744"/>
+      <!-- Center top circle -->
+      <circle cx="100" cy="34" r="10" fill="#1a2744"/>
+      <!-- Left arm chain (thick) -->
+      <rect x="52" y="42" width="8" height="52"
+        rx="4" fill="#1a2744"/>
+      <!-- Right arm chain (thick) -->
+      <rect x="140" y="42" width="8" height="52"
+        rx="4" fill="#1a2744"/>
+      <!-- Left pan filled -->
+      <path d="M28 94 L88 94 Q88 116 58 116
+        Q28 116 28 94 Z" fill="#1a2744"/>
+      <!-- Right pan filled -->
+      <path d="M112 94 L172 94 Q172 116 142 116
+        Q112 116 112 94 Z" fill="#1a2744"/>
+      <!-- Base stem -->
+      <rect x="96" y="168" width="8" height="18"
         fill="#1a2744"/>
-      <!-- Center pivot circle -->
-      <circle cx="100" cy="43" r="7" fill="#1a2744"/>
-      <!-- Left chain -->
-      <line x1="60" y1="48" x2="55" y2="95"
-        stroke="#1a2744" stroke-width="3"/>
-      <!-- Right chain -->
-      <line x1="140" y1="48" x2="145" y2="95"
-        stroke="#1a2744" stroke-width="3"/>
-      <!-- Left pan -->
-      <path d="M35 95 Q55 108 75 95"
-        stroke="#1a2744" stroke-width="3" fill="none"/>
-      <line x1="35" y1="95" x2="75" y2="95"
-        stroke="#1a2744" stroke-width="3"/>
-      <!-- Right pan -->
-      <path d="M125 95 Q145 108 165 95"
-        stroke="#1a2744" stroke-width="3" fill="none"/>
-      <line x1="125" y1="95" x2="165" y2="95"
-        stroke="#1a2744" stroke-width="3"/>
       <!-- Base platform -->
-      <rect x="82" y="168" width="36" height="5"
-        rx="2" fill="#1a2744"/>
+      <rect x="74" y="184" width="52" height="8"
+        rx="4" fill="#1a2744"/>
       <!-- Base feet -->
-      <rect x="72" y="173" width="56" height="4"
-        rx="2" fill="#1a2744"/>
+      <rect x="60" y="190" width="80" height="8"
+        rx="4" fill="#1a2744"/>
     </svg>
   </div>
   <div class="wrap">
