@@ -1,6 +1,7 @@
 """Case routes — dashboard, upload, list, retrieve, status, delete."""
 import json
 import logging
+import tempfile
 import traceback
 import uuid
 from datetime import datetime
@@ -8,7 +9,7 @@ from pathlib import Path
 
 import aiofiles
 from fastapi import APIRouter, BackgroundTasks, Depends, Form, HTTPException, Request, UploadFile
-from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
@@ -532,4 +533,110 @@ def get_case_progress(case_id: uuid.UUID, db: Session = Depends(get_db)) -> JSON
             "progress_message": case.progress_message,
             "processing_log": processing_log,
         }
+    )
+
+
+# ---------------------------------------------------------------------------
+# GET /reports/{case_id}/pdf
+# ---------------------------------------------------------------------------
+
+
+@router.get("/reports/{case_id}/pdf")
+async def download_pdf_report(
+    case_id: uuid.UUID,
+    request: Request,
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(get_db),
+):
+    """Regenerate the PDF report on-demand from chronology_json and stream it back.
+
+    Reports are not persisted to disk long-term — HF Spaces containers are
+    ephemeral, so the report is rebuilt fresh from the stored JSON each time.
+    """
+    try:
+        current_user: User = get_current_user(request, db)
+    except HTTPException:
+        return RedirectResponse(url="/login", status_code=302)
+
+    case: Case | None = db.query(Case).filter(Case.id == case_id).first()
+    if case is None:
+        raise HTTPException(status_code=404, detail="Case not found.")
+    if case.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Access denied.")
+
+    if case.status != "complete" or case.chronology_json is None:
+        raise HTTPException(status_code=404, detail="Case not found or analysis not complete")
+
+    chronology_data = json.loads(case.chronology_json)
+    inconsistency_result = chronology_data.get("inconsistency_result", {})
+    case_data = {"client_name": case.client_name, "case_number": case.case_number}
+
+    tmp_file = tempfile.NamedTemporaryFile(suffix=".pdf", delete=False)
+    tmp_path = tmp_file.name
+    tmp_file.close()
+
+    generate_pdf_report(case_data, chronology_data, inconsistency_result, tmp_path)
+
+    background_tasks.add_task(Path(tmp_path).unlink, missing_ok=True)
+
+    filename = f"ChartLens_Report_{case.client_name or case.id}.pdf"
+    return FileResponse(
+        path=tmp_path,
+        media_type="application/pdf",
+        filename=filename,
+        background=background_tasks,
+        headers={"Content-Disposition": f"attachment; filename={filename}"},
+    )
+
+
+# ---------------------------------------------------------------------------
+# GET /reports/{case_id}/excel
+# ---------------------------------------------------------------------------
+
+
+@router.get("/reports/{case_id}/excel")
+async def download_excel_report(
+    case_id: uuid.UUID,
+    request: Request,
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(get_db),
+):
+    """Regenerate the Excel chronology report on-demand from chronology_json and stream it back.
+
+    Reports are not persisted to disk long-term — HF Spaces containers are
+    ephemeral, so the report is rebuilt fresh from the stored JSON each time.
+    """
+    try:
+        current_user: User = get_current_user(request, db)
+    except HTTPException:
+        return RedirectResponse(url="/login", status_code=302)
+
+    case: Case | None = db.query(Case).filter(Case.id == case_id).first()
+    if case is None:
+        raise HTTPException(status_code=404, detail="Case not found.")
+    if case.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Access denied.")
+
+    if case.status != "complete" or case.chronology_json is None:
+        raise HTTPException(status_code=404, detail="Case not found or analysis not complete")
+
+    chronology_data = json.loads(case.chronology_json)
+    inconsistency_result = chronology_data.get("inconsistency_result", {})
+    case_data = {"client_name": case.client_name, "case_number": case.case_number}
+
+    tmp_file = tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False)
+    tmp_path = tmp_file.name
+    tmp_file.close()
+
+    generate_excel_report(case_data, chronology_data, inconsistency_result, tmp_path)
+
+    background_tasks.add_task(Path(tmp_path).unlink, missing_ok=True)
+
+    filename = f"ChartLens_Report_{case.client_name or case.id}.xlsx"
+    return FileResponse(
+        path=tmp_path,
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        filename=filename,
+        background=background_tasks,
+        headers={"Content-Disposition": f"attachment; filename={filename}"},
     )
