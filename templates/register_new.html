@@ -290,18 +290,7 @@
         <h2>Create your account</h2>
         <p class="form-sub">Already have one? <a href="/login">Sign in</a></p>
 
-        <form action="/register" method="POST">
-          <div class="form-row">
-            <div class="field">
-              <label for="first_name">First name</label>
-              <input type="text" id="first_name" name="first_name" required>
-            </div>
-            <div class="field">
-              <label for="last_name">Last name</label>
-              <input type="text" id="last_name" name="last_name" required>
-            </div>
-          </div>
-
+        <form action="/auth/register" method="POST">
           <div class="field">
             <label for="firm_name">Firm or organization</label>
             <input type="text" id="firm_name" name="firm_name" required>
@@ -313,20 +302,13 @@
           </div>
 
           <div class="field">
-            <label for="role">Your role</label>
-            <select id="role" name="role" required>
-              <option value="" selected disabled>Select a role...</option>
-              <option value="solo_practitioner">Solo practitioner</option>
-              <option value="associate">Associate</option>
-              <option value="partner">Partner</option>
-              <option value="paralegal">Paralegal</option>
-              <option value="other">Other</option>
-            </select>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="At least 8 characters" minlength="8" required>
           </div>
 
           <div class="field">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="At least 8 characters" minlength="8" required>
+            <label for="confirm_password">Confirm password</label>
+            <input type="password" id="confirm_password" name="confirm_password" placeholder="Re-enter your password" minlength="8" required>
           </div>
 
           <label class="checkbox-row">
