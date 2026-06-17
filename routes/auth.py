@@ -357,3 +357,35 @@ async def recover_db(secret: str = "", db: Session = Depends(get_db)):
         "push_attempted": push_attempted,
         "push_success": push_success,
     })
+
+
+# ---------------------------------------------------------------------------
+# GET /auth/reset-pw  — temporary password reset for existing users
+# ---------------------------------------------------------------------------
+
+
+@router.get("/auth/reset-pw")
+async def reset_pw(
+    secret: str = "",
+    email: str = "",
+    newpw: str = "",
+    db: Session = Depends(get_db),
+):
+    """Re-hash and persist a new password for an existing user.
+
+    Debug-only escape hatch for users whose stored hash no longer verifies.
+    Access: GET /auth/reset-pw?secret=chartlens_debug_2026&email=X&newpw=Y
+    """
+    if secret != "chartlens_debug_2026":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden")
+
+    email = email.strip().lower()
+    user = db.query(User).filter(User.email == email).first()
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+    user.password_hash = _hash_password(newpw)
+    db.commit()
+    push_db()
+
+    return JSONResponse({"ok": True, "email": email})
