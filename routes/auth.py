@@ -4,14 +4,14 @@ from datetime import datetime, timedelta, timezone
 
 import bcrypt
 from fastapi import APIRouter, Depends, Form, HTTPException, Request, status
-from fastapi.responses import RedirectResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from jose import JWTError, jwt
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from config import get_settings
-from db_sync import push_db, push_db_async
+from db_sync import push_db
 from models.database import get_db
 from models.user import User, UserOut
 
@@ -229,7 +229,7 @@ async def register(
         ) from exc
 
     logger.info("New user registered: %s | firm: %s", email, firm_name)
-    push_db_async()
+    push_db()
     token = _create_access_token(email)
     response = RedirectResponse(url="/dashboard", status_code=status.HTTP_302_FOUND)
     _attach_auth_cookie(response, token)
@@ -255,6 +255,7 @@ async def login(
     page with an inline error instead of raising HTTPException.
     """
     email = email.strip().lower()
+    logger.info("[LOGIN DEBUG] Attempt for email=%r (password length=%d)", email, len(password))
 
     try:
         user = db.query(User).filter(User.email == email).first()
@@ -265,7 +266,21 @@ async def login(
             detail="Database error",
         ) from exc
 
-    if user is None or not _verify_password(password, user.password_hash):
+    logger.info("[LOGIN DEBUG] User found in DB: %s", user is not None)
+
+    if user is None:
+        logger.warning("[LOGIN DEBUG] 400 reason: user not found — email=%r", email)
+        return templates.TemplateResponse(
+            "auth/login.html",
+            {"request": request, "current_user": None, "error": "Invalid email or password"},
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
+
+    pw_ok = _verify_password(password, user.password_hash)
+    logger.info("[LOGIN DEBUG] Password check passed: %s", pw_ok)
+
+    if not pw_ok:
+        logger.warning("[LOGIN DEBUG] 400 reason: password mismatch for email=%r", email)
         return templates.TemplateResponse(
             "auth/login.html",
             {"request": request, "current_user": None, "error": "Invalid email or password"},
@@ -273,7 +288,7 @@ async def login(
         )
 
     logger.info("User logged in: %s", email)
-    push_db_async()
+    push_db()
     token = _create_access_token(email)
     response = RedirectResponse(url="/dashboard", status_code=status.HTTP_302_FOUND)
     _attach_auth_cookie(response, token)
@@ -302,3 +317,43 @@ async def logout() -> RedirectResponse:
 async def me(current_user: User = Depends(get_current_user)) -> UserOut:
     """Return the authenticated user's profile as JSON."""
     return UserOut.model_validate(current_user)
+
+
+# ---------------------------------------------------------------------------
+# GET /auth/recover-db  — temporary live DB diagnostic
+# ---------------------------------------------------------------------------
+
+
+@router.get("/auth/recover-db")
+async def recover_db(secret: str = "", db: Session = Depends(get_db)):
+    """Return live DB user count and registered emails.
+
+    Protected by a query-param secret. If 0 users are found, also attempts
+    a push_db() so we can confirm the file path is reachable.
+    Access: GET /auth/recover-db?secret=chartlens_debug_2026
+    """
+    if secret != "chartlens_debug_2026":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden")
+
+    try:
+        users = db.query(User).all()
+        user_count = len(users)
+        emails = [u.email for u in users]
+    except Exception as exc:
+        return JSONResponse(
+            {"error": f"DB query failed: {exc}", "user_count": None, "emails": []},
+            status_code=500,
+        )
+
+    push_attempted = False
+    push_success = None
+    if user_count == 0:
+        push_attempted = True
+        push_success = push_db()
+
+    return JSONResponse({
+        "user_count": user_count,
+        "emails": emails,
+        "push_attempted": push_attempted,
+        "push_success": push_success,
+    })

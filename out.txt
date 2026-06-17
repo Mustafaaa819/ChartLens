@@ -1,0 +1,26 @@
+--- match 'Get Started' at 2803189 ---
+a class=\"lk\" href=\"#features\">Capabilities<\u002Fa>\n      <a class=\"lk\" href=\"#privacy\">Security<\u002Fa>\n      <a class=\"lk\" href=\"#start\">Pricing<\u002Fa>\n    <\u002Fnav>\n    <div class=\"nav__cta\">\n      <a class=\"nav__signin\" href=\"Register.html\">Sign in<\u002Fa>\n      <a class=\"btn btn--primary\" href=\"Register.html\">Get Started Free<\u002Fa>\n    <\u002Fdiv>\n  <\u002Fdiv>\n<\
+
+--- match 'Get Started' at 2804099 ---
+ss=\"hero__sub\" data-reveal=\"\">ChartLens reads every page of a medical file, builds a date-ordered chronology, and flags the contradictions that change cases — with a citation back to the source page on every single line.<\u002Fp>\n      <div class=\"hero__actions\" data-reveal=\"\">\n        <a class=\"btn btn--primary\" href=\"Register.html\">Get Started Free <span class=\"arr\" aria-hidden=\"true\">→<\
+
+--- match 'Get Started' at 2824705 ---
+w\">Start free<\u002Fspan>\n        <h2>Read your first file free — <em>chronology in under an hour.<\u002Fem><\u002Fh2>\n        <p>Upload one matter, see the full timeline and every flag, and decide for yourself. No card, no commitment.<\u002Fp>\n        <div class=\"cta__actions\">\n          <a class=\"btn btn--primary\" href=\"Register.html\">Get Started Free <span class=\"arr\" aria-hidden=\"true\">→<\
+
+--- match 'Get started' at 2826209 ---
+with every contradiction flagged and cited.<\u002Fp>\n    <\u002Fdiv>\n    <div class=\"foot__cols\">\n      <div class=\"foot__col\">\n        <h5>Product<\u002Fh5>\n        <a href=\"#how\">How it works<\u002Fa>\n        <a href=\"#features\">Capabilities<\u002Fa>\n        <a href=\"#privacy\">Security<\u002Fa>\n        <a href=\"Register.html\">Get started<\u002Fa>\n      <\u002Fdiv>\n      <div class=\"f
+
+--- match 'Register.html' at 2803096 ---
+nav class=\"nav__links\">\n      <a class=\"lk\" href=\"#how\">How it works<\u002Fa>\n      <a class=\"lk\" href=\"#features\">Capabilities<\u002Fa>\n      <a class=\"lk\" href=\"#privacy\">Security<\u002Fa>\n      <a class=\"lk\" href=\"#start\">Pricing<\u002Fa>\n    <\u002Fnav>\n    <div class=\"nav__cta\">\n      <a class=\"nav__signin\" href=\"Register.html\">Sign in<\u002Fa>\n      <a class=\"btn btn--pri
+
+--- match 'Register.html' at 2803173 ---
+u002Fa>\n      <a class=\"lk\" href=\"#features\">Capabilities<\u002Fa>\n      <a class=\"lk\" href=\"#privacy\">Security<\u002Fa>\n      <a class=\"lk\" href=\"#start\">Pricing<\u002Fa>\n    <\u002Fnav>\n    <div class=\"nav__cta\">\n      <a class=\"nav__signin\" href=\"Register.html\">Sign in<\u002Fa>\n      <a class=\"btn btn--primary\" href=\"Register.html\">Get Started Free<\u002Fa>\n    <\u002Fdiv>\n  <
+
+--- match 'Register.html' at 2804083 ---
+1>\n      <p class=\"hero__sub\" data-reveal=\"\">ChartLens reads every page of a medical file, builds a date-ordered chronology, and flags the contradictions that change cases — with a citation back to the source page on every single line.<\u002Fp>\n      <div class=\"hero__actions\" data-reveal=\"\">\n        <a class=\"btn btn--primary\" href=\"Register.html\">Get Started Free <span class=\"arr\" aria-hidde
+
+--- match 'Register.html' at 2824689 ---
+n class=\"eyebrow\">Start free<\u002Fspan>\n        <h2>Read your first file free — <em>chronology in under an hour.<\u002Fem><\u002Fh2>\n        <p>Upload one matter, see the full timeline and every flag, and decide for yourself. No card, no commitment.<\u002Fp>\n        <div class=\"cta__actions\">\n          <a class=\"btn btn--primary\" href=\"Register.html\">Get Started Free <span class=\"arr\" aria-hidde
+
+--- match 'Register.html' at 2826193 ---
+file, in order, with every contradiction flagged and cited.<\u002Fp>\n    <\u002Fdiv>\n    <div class=\"foot__cols\">\n      <div class=\"foot__col\">\n        <h5>Product<\u002Fh5>\n        <a href=\"#how\">How it works<\u002Fa>\n        <a href=\"#features\">Capabilities<\u002Fa>\n        <a href=\"#privacy\">Security<\u002Fa>\n        <a href=\"Register.html\">Get started<\u002Fa>\n      <\u002Fdiv>\n      

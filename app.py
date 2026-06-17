@@ -49,6 +49,17 @@ async def lifespan(app: FastAPI):
     pull_db()
     logger.info("Database restore complete. Initialising tables …")
     await init_db()
+    # --- startup DB sanity check ---
+    try:
+        from models.database import SessionLocal
+        from models.user import User as _User
+        with SessionLocal() as _db:
+            _count = _db.query(_User).count()
+            _emails = [u.email for u in _db.query(_User).all()]
+        logger.info("[STARTUP DB CHECK] users table: %d rows — %s", _count, _emails)
+    except Exception as _exc:
+        logger.warning("[STARTUP DB CHECK] failed to query users: %s", _exc)
+    # --------------------------------
     logger.info("Database ready. ChartLens is live.")
     yield
     logger.info("ChartLens shutting down. Goodbye.")

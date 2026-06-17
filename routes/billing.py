@@ -13,7 +13,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
 from config import get_settings
-from db_sync import push_db_async
+from db_sync import push_db
 from models.database import get_db
 from models.user import User
 from routes.auth import get_current_user
@@ -238,7 +238,7 @@ async def webhook(request: Request, db: Session = Depends(get_db)):
             user.lemon_subscription_id = str(data.get("id", ""))
             user.subscription_status = "active"
             db.commit()
-            push_db_async()
+            push_db()
             logger.info(
                 "Subscription activated for user %s (event: %s)", user.email, event_name
             )
@@ -262,7 +262,7 @@ async def webhook(request: Request, db: Session = Depends(get_db)):
         if user:
             user.subscription_status = "past_due"
             db.commit()
-            push_db_async()
+            push_db()
             logger.info("Subscription past_due for user %s", user.email)
 
     elif event_name in ("subscription_cancelled", "subscription_expired"):
@@ -285,7 +285,7 @@ async def webhook(request: Request, db: Session = Depends(get_db)):
             user.subscription_status = "canceled"
             user.lemon_subscription_id = None
             db.commit()
-            push_db_async()
+            push_db()
             logger.info("Subscription cancelled for user %s", user.email)
 
     else:

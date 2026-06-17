@@ -1,0 +1,10 @@
+Occurrences: [2803089, 2803166, 2804076, 2824682, 2826186]
+'  <a class=\\"lk\\" href=\\"#start\\">Pricing<\\u002Fa>\\n    <\\u002Fnav>\\n    <div class=\\"nav__cta\\">\\n      <a class=\\"nav__signin\\" href=\\"Register.html\\">Sign in<\\u002Fa>\\n      <a class=\\"btn btn--primary\\" href=\\"Register.html\\">Get Started Free<\\u002Fa>\\n   '
+
+' class=\\"nav__cta\\">\\n      <a class=\\"nav__signin\\" href=\\"Register.html\\">Sign in<\\u002Fa>\\n      <a class=\\"btn btn--primary\\" href=\\"Register.html\\">Get Started Free<\\u002Fa>\\n    <\\u002Fdiv>\\n  <\\u002Fdiv>\\n<\\u002Fheader>\\n\\n<main id=\\"top\\">\\n<!-- ======'
+
+' page on every single line.<\\u002Fp>\\n      <div class=\\"hero__actions\\" data-reveal=\\"\\">\\n        <a class=\\"btn btn--primary\\" href=\\"Register.html\\">Get Started Free <span class=\\"arr\\" aria-hidden=\\"true\\">→<\\u002Fspan><\\u002Fa>\\n        <a class=\\"btn bt'
+
+'ide for yourself. No card, no commitment.<\\u002Fp>\\n        <div class=\\"cta__actions\\">\\n          <a class=\\"btn btn--primary\\" href=\\"Register.html\\">Get Started Free <span class=\\"arr\\" aria-hidden=\\"true\\">→<\\u002Fspan><\\u002Fa>\\n          <a class=\\"btn '
+
+'t works<\\u002Fa>\\n        <a href=\\"#features\\">Capabilities<\\u002Fa>\\n        <a href=\\"#privacy\\">Security<\\u002Fa>\\n        <a href=\\"Register.html\\">Get started<\\u002Fa>\\n      <\\u002Fdiv>\\n      <div class=\\"foot__col\\">\\n        <h5>Firm<\\u002Fh5>\\n     '
