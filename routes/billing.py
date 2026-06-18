@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter(tags=["billing"])
 templates = Jinja2Templates(directory="templates")
 
-TRIAL_UPLOAD_LIMIT = 3
+TRIAL_UPLOAD_LIMIT = 2
 _LS_BASE = "https://api.lemonsqueezy.com/v1"
 
 

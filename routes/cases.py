@@ -25,6 +25,7 @@ from models.case import Case, CaseOut
 from models.database import SessionLocal, get_db
 from models.user import User
 from routes.auth import COOKIE_NAME, _decode_token, get_current_user
+from routes.billing import TRIAL_UPLOAD_LIMIT
 
 logger = logging.getLogger(__name__)
 
@@ -256,7 +257,7 @@ def _check_upload_access(user: User) -> str | None:
     if status == "past_due":
         return "Your subscription payment failed. Please update your billing details."
 
-    if status == "trial" and user.trial_cases_used >= 3:
+    if status == "trial" and user.trial_cases_used >= TRIAL_UPLOAD_LIMIT:
         return "Your free trial has ended. Upgrade to ChartLens Pro to continue."
 
     if status not in ("trial", "active", "cancelled", "canceled", "past_due"):

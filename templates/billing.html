@@ -142,7 +142,7 @@
                   p-3 text-sm text-[#dc2626]">
       </div>
 
-      <button id="upgrade-btn"
+      <button id="subscribe-btn" onclick="handleSubscribe()"
               class="w-full bg-action-blue hover:bg-blue-700 text-white
                      text-sm font-semibold py-3 px-5 rounded
                      transition-colors">
@@ -302,4 +302,35 @@
       });
     }
   }());
+
+  async function handleSubscribe() {
+    const btn = document.getElementById('subscribe-btn');
+    btn.disabled = true;
+    btn.textContent = 'Redirecting...';
+    try {
+        const response = await fetch('/billing/subscribe', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+        });
+        if (!response.ok) {
+            const err = await response.json();
+            alert(err.detail || 'Something went wrong. Please try again.');
+            btn.disabled = false;
+            btn.textContent = 'Upgrade to Pro — $149/month';
+            return;
+        }
+        const data = await response.json();
+        if (data.checkout_url) {
+            window.location.href = data.checkout_url;
+        } else {
+            alert('Could not get checkout URL. Please try again.');
+            btn.disabled = false;
+            btn.textContent = 'Upgrade to Pro — $149/month';
+        }
+    } catch (e) {
+        alert('Network error. Please try again.');
+        btn.disabled = false;
+        btn.textContent = 'Upgrade to Pro — $149/month';
+    }
+  }
 </script>
