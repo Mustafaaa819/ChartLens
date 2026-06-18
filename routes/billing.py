@@ -98,10 +98,21 @@ async def create_checkout(
                 json=payload,
                 timeout=15.0,
             )
-            resp.raise_for_status()
+            if not resp.is_success:
+                logger.error(
+                    "LemonSqueezy checkout failed: status=%s body=%s",
+                    resp.status_code,
+                    resp.text,
+                )
+                raise HTTPException(
+                    status_code=status.HTTP_502_BAD_GATEWAY,
+                    detail=f"Checkout failed: {resp.status_code} — {resp.text[:300]}",
+                )
             data = resp.json()
         checkout_url: str = data["data"]["attributes"]["url"]
         return JSONResponse({"checkout_url": checkout_url})
+    except HTTPException:
+        raise
     except Exception as exc:
         logger.error("Lemon Squeezy checkout creation failed: %s", exc)
         raise HTTPException(
