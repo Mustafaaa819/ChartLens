@@ -231,6 +231,7 @@
 </div>
 {% endblock %}
 
+{% block scripts %}
 <script>
   (function () {
     var upgradeBtn = document.getElementById('upgrade-btn');
@@ -302,8 +303,9 @@
       });
     }
   }());
-
-  async function handleSubscribe() {
+</script>
+<script>
+async function handleSubscribe() {
     const btn = document.getElementById('subscribe-btn');
     btn.disabled = true;
     btn.textContent = 'Redirecting...';
@@ -332,5 +334,6 @@
         btn.disabled = false;
         btn.textContent = 'Upgrade to Pro — $149/month';
     }
-  }
+}
 </script>
+{% endblock %}
