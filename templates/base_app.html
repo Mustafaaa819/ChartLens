@@ -202,14 +202,14 @@
             Trial Usage
           </span>
           <span class="text-[10px] text-blue-300 opacity-70 tabular-nums">
-            {{ current_user.trial_cases_used }}/3
+            {{ current_user.trial_cases_used }}/2
           </span>
         </div>
         <div class="w-full bg-white bg-opacity-10 rounded-full h-1.5
                     overflow-hidden">
           <div class="bg-amber-400 h-1.5 rounded-full transition-all
                       duration-500"
-               style="width: {{ ((current_user.trial_cases_used / 3) * 100) | int }}%">
+               style="width: {{ ((current_user.trial_cases_used / 2) * 100) | int }}%">
           </div>
         </div>
         <a href="/billing"
