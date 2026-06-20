@@ -14,7 +14,7 @@ from config import get_settings
 
 logger = logging.getLogger(__name__)
 
-MODEL = "claude-sonnet-4-20250514"
+MODEL = "claude-sonnet-4-6"
 
 
 # ---------------------------------------------------------------------------
@@ -37,7 +37,28 @@ def _parse_json_response(text: str) -> dict:
     fence = re.search(r"```(?:json)?\s*([\s\S]*?)\s*```", text)
     if fence:
         text = fence.group(1)
+    elif text.startswith("```"):
+        # Truncated response (hit max_tokens mid-generation): only the opening
+        # fence exists, so the closing-fence regex above can't match. Strip
+        # just the opening marker and any trailing fence if it happens to be there.
+        text = re.sub(r"^```(?:json)?\s*", "", text)
+        text = re.sub(r"\s*```\s*$", "", text)
     return json.loads(text.strip())
+
+
+def _extract_text_from_response(response: anthropic.types.Message) -> str:
+    """Return the text of the first text-type content block.
+
+    response.content can include non-text blocks (e.g. thinking blocks)
+    before or alongside the text block, so content[0] is not reliable.
+    """
+    for block in response.content:
+        if block.type == "text":
+            return block.text
+    raise ValueError(
+        "No text block found in response.content. "
+        f"Block types present: {[block.type for block in response.content]}"
+    )
 
 
 def _build_extraction_prompt(start_page: int, end_page: int, chunk_text: str) -> str:
@@ -143,11 +164,36 @@ def extract_medical_events(chunk: dict) -> dict:
         client = _get_client()
         response = client.messages.create(
             model=MODEL,
-            max_tokens=4000,
+            max_tokens=16000,
             messages=[{"role": "user", "content": prompt}],
         )
 
-        raw_text = response.content[0].text
+        logger.debug(
+            "extract_medical_events chunk %d output_tokens used: %d (max_tokens=16000)",
+            chunk_index,
+            response.usage.output_tokens,
+        )
+        if response.stop_reason == "max_tokens":
+            raise RuntimeError(
+                f"Response truncated at max_tokens for chunk {chunk_index} — "
+                f"output_tokens={response.usage.output_tokens}"
+            )
+        logger.debug(
+            "extract_medical_events chunk %d response block types: %s",
+            chunk_index,
+            [block.type for block in response.content],
+        )
+        raw_text = _extract_text_from_response(response)
+        logger.debug(
+            "extract_medical_events chunk %d raw_text (first 500 chars): %r",
+            chunk_index,
+            raw_text[:500],
+        )
+        logger.debug(
+            "extract_medical_events chunk %d raw_text length: %d",
+            chunk_index,
+            len(raw_text),
+        )
         data = _parse_json_response(raw_text)
 
         if "events" not in data or not isinstance(data["events"], list):
@@ -192,11 +238,32 @@ def detect_inconsistencies(chronology_summary: str) -> dict:
         client = _get_client()
         response = client.messages.create(
             model=MODEL,
-            max_tokens=2000,
+            max_tokens=8000,
             messages=[{"role": "user", "content": prompt}],
         )
 
-        raw_text = response.content[0].text
+        logger.debug(
+            "detect_inconsistencies output_tokens used: %d (max_tokens=8000)",
+            response.usage.output_tokens,
+        )
+        if response.stop_reason == "max_tokens":
+            raise RuntimeError(
+                f"Response truncated at max_tokens for inconsistency detection — "
+                f"output_tokens={response.usage.output_tokens}"
+            )
+        logger.debug(
+            "detect_inconsistencies response block types: %s",
+            [block.type for block in response.content],
+        )
+        raw_text = _extract_text_from_response(response)
+        logger.debug(
+            "detect_inconsistencies raw_text (first 500 chars): %r",
+            raw_text[:500],
+        )
+        logger.debug(
+            "detect_inconsistencies raw_text length: %d",
+            len(raw_text),
+        )
         data = _parse_json_response(raw_text)
 
         if "inconsistencies" not in data or not isinstance(
@@ -236,7 +303,7 @@ def ping_claude() -> bool:
             max_tokens=10,
             messages=[{"role": "user", "content": "Reply with only the word PONG"}],
         )
-        reply = response.content[0].text.strip().upper()
+        reply = _extract_text_from_response(response).strip().upper()
         return "PONG" in reply
     except Exception as exc:
         logger.error("ping_claude failed — %s", exc)

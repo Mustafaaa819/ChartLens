@@ -18,7 +18,7 @@ async def _tracked_chunk(coro, chunk_index: int, total: int, callback) -> dict:
     return result
 
 
-async def analyze_case(pdf_path: str, progress_callback=None) -> dict:
+async def analyze_case(pdf_path: str, progress_callback=None, max_pages: int | None = None) -> dict:
     """Run the full extraction pipeline for a single case PDF.
 
     Steps:
@@ -31,6 +31,9 @@ async def analyze_case(pdf_path: str, progress_callback=None) -> dict:
         pdf_path: Absolute path string to the PDF file on disk.
         progress_callback: Optional async callable(message: str). Called after
             chunking and after each chunk completes. Caller must not raise.
+        max_pages: Optional cap on pages analyzed (trial-tier cost control). If
+            the PDF has more pages than this, only the first max_pages are
+            analyzed. None means no cap.
 
     Returns:
         On success:
@@ -41,6 +44,8 @@ async def analyze_case(pdf_path: str, progress_callback=None) -> dict:
                 "failed_chunks": int,
                 "failed_chunk_indexes": list[int],
                 "total_events": int,
+                "pages_analyzed": int,
+                "pages_truncated": bool,
             }
         On catastrophic failure (exception before gather):
             Same keys as above, all zeroed, plus "error": str.
@@ -49,6 +54,17 @@ async def analyze_case(pdf_path: str, progress_callback=None) -> dict:
         pages = extract_text_by_page(Path(pdf_path))
         if not pages:
             return _empty_result(error="PDF text extraction returned no pages.")
+
+        pages_were_truncated = False
+        if max_pages is not None and len(pages) > max_pages:
+            logger.info(
+                "analyze_case: truncating pages for trial limit — %d total, analyzing %d | %s",
+                len(pages),
+                max_pages,
+                Path(pdf_path).name,
+            )
+            pages = pages[:max_pages]
+            pages_were_truncated = True
 
         chunks = chunk_pages(pages)
         if not chunks:

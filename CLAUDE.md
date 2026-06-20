@@ -86,7 +86,7 @@ Use exactly these technologies. Do not substitute without asking.
 | Styling        | Tailwind CSS (CDN)                | No build step required                     |
 | PDF Extraction | PyMuPDF (fitz)                    | Primary PDF parser                         |
 | OCR fallback   | Tesseract / pytesseract           | For scanned/image-based PDFs (Phase 2)     |
-| AI Model       | Claude claude-sonnet-4-20250514   | Via Anthropic Python SDK                   |
+| AI Model       | Claude claude-sonnet-4-6   | Via Anthropic Python SDK                   |
 | AI Pattern     | Map-Reduce chunking               | Never send full PDF to Claude at once      |
 | Async          | Python asyncio + httpx            | For parallel Claude API calls              |
 | Auth           | Simple email+password             | JWT tokens, no OAuth for MVP               |

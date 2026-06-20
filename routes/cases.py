@@ -62,7 +62,7 @@ templates.env.filters["currency"] = _currency_fmt
 # ---------------------------------------------------------------------------
 
 
-async def run_analysis_pipeline(case_id: uuid.UUID, pdf_path: str) -> None:
+async def run_analysis_pipeline(case_id: uuid.UUID, pdf_path: str, max_pages: int | None = None) -> None:
     """Full AI analysis pipeline executed as a FastAPI BackgroundTask.
 
     Creates its own DB session — the request session is closed before
@@ -94,7 +94,9 @@ async def run_analysis_pipeline(case_id: uuid.UUID, pdf_path: str) -> None:
             db_bg.commit()
 
         # Stage: extract (5% → 70%)
-        analysis_result = await analyze_case(pdf_path, progress_callback=_progress_callback)
+        analysis_result = await analyze_case(
+            pdf_path, progress_callback=_progress_callback, max_pages=max_pages
+        )
 
         if analysis_result.get("error") and not analysis_result.get("events"):
             raise RuntimeError(f"Extraction failed: {analysis_result['error']}")
@@ -109,6 +111,7 @@ async def run_analysis_pipeline(case_id: uuid.UUID, pdf_path: str) -> None:
         # Stage: chronology (70% → 75%)
         case.progress_percent = 75
         case.progress_message = "Building chronology..."
+        case.pages_analyzed = analysis_result.get("pages_analyzed")
         db_bg.commit()
 
         chronology_result = build_chronology(analysis_result)
@@ -339,6 +342,13 @@ async def upload_case(
     page_count: int = validation["page_count"]
     original_filename = filename or disk_filename
 
+    # Step 2b — determine trial page-cap gating (2nd trial upload, >80 pages)
+    is_trial_gated_case: bool = (
+        current_user.subscription_status == "trial"
+        and current_user.trial_cases_used == 1
+        and page_count > 80
+    )
+
     # Step 3 — create Case row
     try:
         case = Case(
@@ -351,6 +361,7 @@ async def upload_case(
             page_count=page_count,
             status="uploading",
             progress_percent=0,
+            is_gated=is_trial_gated_case,
         )
         db.add(case)
         db.commit()
@@ -361,6 +372,13 @@ async def upload_case(
         db.rollback()
         file_path.unlink(missing_ok=True)
         return _upload_error("Failed to create case record.")
+
+    if is_trial_gated_case:
+        logger.info(
+            "Trial page-cap gating applied: case=%s true_page_count=%d cap=80",
+            case.id,
+            page_count,
+        )
 
     # Step 4 — increment trial_cases_used
     try:
@@ -376,6 +394,7 @@ async def upload_case(
         run_analysis_pipeline,
         case_id=case.id,
         pdf_path=str(file_path),
+        max_pages=80 if is_trial_gated_case else None,
     )
 
     # Step 6 — redirect to results page

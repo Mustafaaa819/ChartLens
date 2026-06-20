@@ -40,7 +40,7 @@ Built for solo PI attorneys who bill by the hour and can't afford to spend that 
 | Layer | Technology |
 |---|---|
 | Backend | FastAPI (Python 3.12) |
-| AI Pipeline | Anthropic Claude API (`claude-sonnet-4-20250514`) |
+| AI Pipeline | Anthropic Claude API (`claude-sonnet-4-6`) |
 | PDF Extraction | PyMuPDF |
 | Database | SQLAlchemy + SQLite |
 | Templates | Jinja2 + Tailwind CSS (CDN) |

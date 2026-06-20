@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict
-from sqlalchemy import DateTime, ForeignKey, Integer, String, Text
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.types import Uuid
 
@@ -41,6 +41,10 @@ class Case(Base):
     progress_message: Mapped[str | None] = mapped_column(String(255), nullable=True, default=None)
     # JSON-encoded list of timestamped log entries for the progress endpoint
     processing_log: Mapped[str | None] = mapped_column(Text, nullable=True, default=None)
+    # Pages actually sent through the AI pipeline; may be less than page_count if trial-truncated
+    pages_analyzed: Mapped[int | None] = mapped_column(Integer, nullable=True, default=None)
+    # True when results are gated behind a paywall due to trial page-cap truncation
+    is_gated: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
     user: Mapped["User"] = relationship(  # type: ignore[name-defined]
         "User", back_populates="cases"
@@ -78,3 +82,5 @@ class CaseOut(BaseModel):
     pdf_report_path: str | None
     excel_report_path: str | None
     error_message: str | None
+    pages_analyzed: int | None
+    is_gated: bool
