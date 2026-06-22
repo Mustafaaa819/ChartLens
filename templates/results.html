@@ -373,17 +373,17 @@
   <!-- Chronology table -->
   <div class="bg-white rounded border border-rule-line mb-8 overflow-hidden">
     <div class="overflow-x-auto">
-      <table class="min-w-full text-sm" style="table-layout: fixed; width: 100%;">
+      <table class="text-sm" style="table-layout: fixed; width: 1280px;">
         <colgroup>
-          <col style="width: 10%">  <!-- Date -->
-          <col style="width: 16%">  <!-- Provider -->
-          <col style="width: 11%">  <!-- Visit Type -->
-          <col style="width: 22%">  <!-- Diagnosis -->
-          <col style="width: 22%">  <!-- Treatment -->
-          <col style="width: 8%">   <!-- Billed -->
-          <col style="width: 7%">   <!-- Paid -->
-          <col style="width: 8%">   <!-- Confidence -->
-          <col style="width: 6%">   <!-- Pages -->
+          <col style="width: 110px">  <!-- Date -->
+          <col style="width: 190px">  <!-- Provider -->
+          <col style="width: 130px">  <!-- Visit Type -->
+          <col style="width: 260px">  <!-- Diagnosis -->
+          <col style="width: 260px">  <!-- Treatment -->
+          <col style="width: 90px">   <!-- Billed -->
+          <col style="width: 90px">   <!-- Paid -->
+          <col style="width: 80px">   <!-- Page -->
+          <col style="width: 90px">   <!-- Confidence -->
         </colgroup>
         <thead>
           <tr class="border-b-2 border-navy">
@@ -417,7 +417,11 @@
             </th>
             <th class="px-4 py-4 text-center text-[10px] font-semibold uppercase
                        tracking-[0.08em] text-gray-400 whitespace-nowrap">
-              Confidence · Page
+              Page
+            </th>
+            <th class="px-4 py-4 text-center text-[10px] font-semibold uppercase
+                       tracking-[0.08em] text-gray-400 whitespace-nowrap">
+              Confidence
             </th>
           </tr>
         </thead>
@@ -473,24 +477,6 @@
               </td>
 
               <td class="px-4 py-3 text-center align-top">
-                {% set conf = (event.confidence or "low") | lower %}
-                {% if conf == "high" %}
-                  <span class="inline-flex items-center px-2 py-0.5 rounded
-                               text-xs font-medium bg-green-100 text-[#16a34a] mb-1">
-                    High
-                  </span>
-                {% elif conf == "medium" %}
-                  <span class="inline-flex items-center px-2 py-0.5 rounded
-                               text-xs font-medium bg-amber-100 text-[#d97706] mb-1">
-                    Med
-                  </span>
-                {% else %}
-                  <span class="inline-flex items-center px-2 py-0.5 rounded
-                               text-xs font-medium bg-red-100 text-[#dc2626] mb-1">
-                    Low
-                  </span>
-                {% endif %}
-                <br>
                 {% set pages = event.page_numbers if event.page_numbers else [] %}
                 {% if pages %}
                   {% for pg in pages %}
@@ -501,12 +487,32 @@
                 {% endif %}
               </td>
 
+              <td class="px-4 py-3 text-center align-top">
+                {% set conf = (event.confidence or "low") | lower %}
+                {% if conf == "high" %}
+                  <span class="inline-flex items-center px-2 py-0.5 rounded
+                               text-xs font-medium bg-green-100 text-[#16a34a]">
+                    High
+                  </span>
+                {% elif conf == "medium" %}
+                  <span class="inline-flex items-center px-2 py-0.5 rounded
+                               text-xs font-medium bg-amber-100 text-[#d97706]">
+                    Med
+                  </span>
+                {% else %}
+                  <span class="inline-flex items-center px-2 py-0.5 rounded
+                               text-xs font-medium bg-red-100 text-[#dc2626]">
+                    Low
+                  </span>
+                {% endif %}
+              </td>
+
             </tr>
             {% endfor %}
 
           {% else %}
             <tr>
-              <td colspan="8"
+              <td colspan="9"
                   class="px-4 py-10 text-center text-gray-400 text-sm">
                 No dated events found.
               </td>
